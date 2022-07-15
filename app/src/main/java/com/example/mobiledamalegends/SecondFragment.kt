@@ -41,4 +41,6 @@ class SecondFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }
