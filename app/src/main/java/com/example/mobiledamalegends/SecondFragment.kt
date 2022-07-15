@@ -24,6 +24,7 @@ class SecondFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
 
+
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -35,6 +36,7 @@ class SecondFragment : Fragment() {
         binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
+
     }
 
     override fun onDestroyView() {
