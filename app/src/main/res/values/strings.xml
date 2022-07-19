@@ -5,8 +5,11 @@
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
+    <string name="welcome">Welcome Player</string>
     <string name="previous">Previous</string>
-
+    <string name="signup">Signup</string>
+    <string name="about">About</string>
+    <string name="login">Login</string>
     <string name="hello_first_fragment">Welcome to Mobile Dama Legends</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

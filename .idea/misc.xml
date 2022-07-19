@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_second.xml" value="1.1" />
+        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/activity_main.xml" value="0.25769927536231885" />
+        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/content_main.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_first.xml" value="0.25" />
+        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_second.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_third.xml" value="0.25885416666666666" />
+        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/menu/menu_main.xml" value="0.262037037037037" />
         <entry key="..\:/Users/knee_son/Desktop/MobileDamaLegends/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1805" />
         <entry key="..\:/Users/knee_son/Desktop/MobileDamaLegends/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1805" />
         <entry key="..\:/Users/knee_son/Desktop/MobileDamaLegends/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
@@ -14,7 +19,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
