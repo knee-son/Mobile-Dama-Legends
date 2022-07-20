@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bgcolor"
-    tools:context=".FirstFragment">
+    tools:context=".LoginFragment">
 
     <TextView
         android:id="@+id/textview_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_first_fragment"
+        android:text="@string/welcome"
         android:textAlignment="center"
         android:textColor="#7DA4DF"
         android:textSize="34sp"
@@ -33,33 +33,6 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textview_welcome"
-        tools:ignore="TextContrastCheck" />
-
-    <Button
-        android:id="@+id/button_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:text="@string/signup"
-        app:backgroundTint="#9BC4FF"
-        app:layout_constraintBottom_toBottomOf="@id/button_first"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_about"
-        tools:ignore="TextContrastCheck" />
-
-    <Button
-        android:id="@+id/button_about"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="@string/about"
-        app:backgroundTint="#9BC4FF"
-        app:layout_constraintBottom_toBottomOf="@id/button_signup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
         tools:ignore="TextContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
 package com.example.mobiledamalegends
 
-class ThirdFragment {
+class LoginFragment {
 }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgcolor"
+    tools:context=".MenuFragment">
+
+    <TextView
+        android:id="@+id/textview_welcome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Welcome to Mobile Dama Legends!"
+        android:textAlignment="center"
+        android:textColor="#7DA4DF"
+        android:textSize="48sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.22000003"
+        app:layout_constraintVertical_chainStyle="spread"
+        tools:ignore="TextContrastCheck" />
+
+    <Button
+        android:id="@+id/button_first"
+        android:layout_width="149dp"
+        android:layout_height="71dp"
+        android:text="@string/login"
+        app:backgroundTint="#9BC4FF"
+        app:layout_constraintBottom_toTopOf="@+id/button_signup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_welcome"
+        tools:ignore="TextContrastCheck" />
+
+    <Button
+        android:id="@+id/button_signup"
+        android:layout_width="149dp"
+        android:layout_height="71dp"
+        android:text="@string/signup"
+        app:backgroundTint="#9BC4FF"
+        app:layout_constraintBottom_toTopOf="@+id/button_about"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_first"
+        tools:ignore="TextContrastCheck" />
+
+    <Button
+        android:id="@+id/button_about"
+        android:layout_width="149dp"
+        android:layout_height="71dp"
+        android:text="@string/about"
+        app:backgroundTint="#9BC4FF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_signup"
+        tools:ignore="TextContrastCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
