@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bgcolor"
-    tools:context=".FirstFragment">
+    tools:context=".ThirdFragment">
 
     <TextView
         android:id="@+id/textview_welcome"

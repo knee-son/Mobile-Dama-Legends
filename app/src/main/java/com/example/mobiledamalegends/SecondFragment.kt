@@ -24,7 +24,6 @@ class SecondFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
 
-
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -43,6 +42,4 @@ class SecondFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }
