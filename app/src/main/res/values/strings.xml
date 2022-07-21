@@ -17,7 +17,7 @@
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="confirmPassword">Comfirm Password</string>
+    <string name="confirmPassword">Confirm Password</string>
     <string name="getStarted">Let us Get Started</string>
     <string name="alreadyHaveAcc">Already Have an Account?</string>
     <string name="dontHaveAcc">Do not Have an Account?</string>
