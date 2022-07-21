@@ -21,5 +21,6 @@
     <string name="getStarted">Let us Get Started</string>
     <string name="alreadyHaveAcc">Already Have an Account?</string>
     <string name="dontHaveAcc">Do not Have an Account?</string>
+    <string name="title_activity_maps">MapsActivity</string>
 
 </resources>

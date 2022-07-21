@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "458829081249",
+    "project_id": "mobile-dama-legends",
+    "storage_bucket": "mobile-dama-legends.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458829081249:android:17fdd04632498dfb9adee0",
+        "android_client_info": {
+          "package_name": "com.example.mobiledamalegends"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "458829081249-2cmg2h9oac1ss0229s2ptt69lg0aj05n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABgw_bqXjupfvei7Z-dizBlDa4CyV96Jg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "458829081249-2cmg2h9oac1ss0229s2ptt69lg0aj05n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
