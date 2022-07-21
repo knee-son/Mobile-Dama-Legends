@@ -103,7 +103,7 @@
         android:layout_marginTop="32dp"
         android:text="@string/signup"
         android:textColor="#FFFFFF"
-        app:backgroundTint="#7DA4DF"
+        app:backgroundTint="#9BC4FF"
         app:layout_constraintEnd_toEndOf="@+id/inputConfirmPassword"
         app:layout_constraintStart_toStartOf="@+id/inputConfirmPassword"
         app:layout_constraintTop_toBottomOf="@+id/inputConfirmPassword" />
