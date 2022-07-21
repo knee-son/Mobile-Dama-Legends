@@ -3,40 +3,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/MenuFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/MenuFragment"
         android:name="com.example.mobiledamalegends.MenuFragment"
-        android:label="@string/first_fragment_label"
+        android:label="MenuFragment"
         tools:layout="@layout/fragment_menu">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_MenuFragment_to_SignupFragment"
+            app:destination="@id/SignupFragment" />
 
         <action
-            android:id="@+id/action_FirstFragment_to_signupFragment"
-            app:destination="@id/signupFragment" />
+        android:id="@+id/action_MenuFragment_to_LoginFragment"
+        app:destination="@id/LoginFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
+        android:id="@+id/GameFragment"
         android:name="com.example.mobiledamalegends.GameFragment"
-        android:label="@string/second_fragment_label"
+        android:label="GameFragment"
         tools:layout="@layout/fragment_game">
-
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_GameFragment_to_MenuFragment"
+            app:destination="@id/MenuFragment" />
     </fragment>
     <fragment
-        android:id="@+id/signupFragment"
+        android:id="@+id/SignupFragment"
         android:name="com.example.mobiledamalegends.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
 
-    <action
-        android:id="@+id/action_SecondFragment_to_FirstFragment"
-        app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_SignupFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/action_SignupFragment_to_GameFragment"
+            app:destination="@id/GameFragment" />
+    </fragment>
+    <fragment
+    android:id="@+id/LoginFragment"
+    android:name="com.example.mobiledamalegends.LoginFragment"
+    android:label="fragment_signup"
+    tools:layout="@layout/fragment_login" >
+
+        <action
+            android:id="@+id/action_LoginFragment_to_SignupFragment"
+            app:destination="@id/SignupFragment" />
+        <action
+            android:id="@+id/action_LoginFragment_to_GameFragment"
+            app:destination="@id/GameFragment" />
     </fragment>
 </navigation>

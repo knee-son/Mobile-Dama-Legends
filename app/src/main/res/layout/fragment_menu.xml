@@ -26,7 +26,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/button_first"
+        android:id="@+id/button_login"
         android:layout_width="149dp"
         android:layout_height="71dp"
         android:text="@string/login"
@@ -50,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_first"
+        app:layout_constraintTop_toBottomOf="@+id/button_login"
         tools:ignore="TextContrastCheck" />
 
     <Button

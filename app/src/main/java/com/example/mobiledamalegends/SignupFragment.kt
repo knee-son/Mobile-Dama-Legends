@@ -35,9 +35,12 @@ class SignupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.textAlreadyHaveAcc.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+            findNavController().navigate(R.id.action_SignupFragment_to_LoginFragment)
         }
 
+        binding.btnSignup.setOnClickListener {
+            findNavController().navigate(R.id.action_SignupFragment_to_GameFragment)
+        }
     }
 
     override fun onDestroyView() {

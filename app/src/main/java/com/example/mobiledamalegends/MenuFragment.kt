@@ -32,12 +32,12 @@ class MenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        binding.buttonLogin.setOnClickListener {
+            findNavController().navigate(R.id.action_MenuFragment_to_LoginFragment)
         }
 
         binding.buttonSignup.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_signupFragment)
+            findNavController().navigate(R.id.action_MenuFragment_to_SignupFragment)
         }
     }
 

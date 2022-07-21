@@ -63,7 +63,7 @@ class GameFragment : Fragment() {
 //        }
 
         binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+            findNavController().navigate(R.id.action_GameFragment_to_MenuFragment)
         }
 
     }
