@@ -17,6 +17,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <FrameLayout
+        android:id="@+id/game_frame"
+        android:layout_width="340dp"
+        android:layout_height="340dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_second"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/dama_board"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/damatiles" />
+
+        <RelativeLayout
+            android:id="@+id/dama_field"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </FrameLayout>
+
     <Button
         android:id="@+id/button_second"
         android:layout_width="wrap_content"
@@ -26,28 +49,8 @@
         app:backgroundTint="#9BC4FF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/board" />
-
-    <ImageView
-        android:id="@+id/board"
-        android:layout_width="373dp"
-        android:layout_height="364dp"
-        android:src="@drawable/damaboard"
-        app:layout_constraintBottom_toTopOf="@+id/button_second"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.47"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/whitepiece"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="32dp"
-        android:src="@drawable/damapiece"
-        app:layout_constraintBottom_toBottomOf="@+id/board"
-        app:layout_constraintStart_toStartOf="@+id/board" />
+        app:layout_constraintTop_toBottomOf="@+id/game_frame" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
