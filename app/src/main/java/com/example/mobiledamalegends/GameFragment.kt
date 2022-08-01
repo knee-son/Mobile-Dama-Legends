@@ -91,7 +91,7 @@ class GameFragment : Fragment() {
     fun do_move() {
         val coOrd = pos_to_coOrd(to_pos)
         piece_map[from_pos].tile_image?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
-        Collections.swap(piece_map.toMutableList(), from_pos, to_pos)
+//        Collections.swap(piece_map.toMutableList(), from_pos, to_pos)
     }
 
     fun do_eat(arr: IntArray) {
@@ -105,6 +105,23 @@ class GameFragment : Fragment() {
     fun pos_to_coOrd(_pos: Int): FloatArray {
         val pos = if(!white_playing) 31-_pos else _pos
         return floatArrayOf (chp*((pos%4)*2+(pos/4)%2)+ofs, chp*(7-pos/4)+ofs)
+    }
+
+    fun coOrd_to_pos(x: Float, y: Float): Int{
+        val clip = {i: Int -> if(i<0) 0 else if(i>7) 7 else i}
+
+        var y_component = clip( ((brd-y)/chp-.5).toInt() )
+        y_component *= 8
+        println("y_component: ${y_component}")
+
+        var x_component = clip( (x/chp+.5).toInt() )
+        println("x_component: ${x_component}")
+
+        var pos_hilaw = x_component + y_component
+        return if(pos_hilaw%2 == 0) pos_hilaw/2
+//        return if( (y_component%2==1) == (x_component%(2*chp)>=chp) )
+//            x_component + 4*y_component
+        else from_pos
     }
 
     val put_state = {i: Int, t: TileState -> piece_map.set(i, TileContent(t))}
@@ -152,7 +169,7 @@ class GameFragment : Fragment() {
                 cur_im.setOnTouchListener(OnTouchListener { v, event ->
                     when (event.actionMasked) {
                         MotionEvent.ACTION_DOWN -> {
-                            from_pos = i
+                            from_pos = coOrd_to_pos(v.x, v.y)
                             println("from_pos: ${from_pos}")
                             v.z = 1f
                             v.setLayoutParams(p(pop_up))
@@ -163,22 +180,11 @@ class GameFragment : Fragment() {
                         MotionEvent.ACTION_MOVE -> v.animate().x(event.rawX + xCoOrdinate)
                             .y(event.rawY + yCoOrdinate).setDuration(0).start()
                         MotionEvent.ACTION_UP -> {
-                            println("x, y: ${v.x}, ${brd-v.y}")
-                            val y_component = ((brd-v.y)/chp).toInt()
-                            val x_component = (v.x/(chp*2)).toInt()
-
-//                            does x and y land on a dark tile?
-//                            P: y_component is odd ( y_component%2 == 1 )
-//                            Q: x_component is > 1 chop ( x_component%(2*chp) > chp )
-//                            T = P&&Q || !P!Q -> P == P (this is an xNOR)
-//                            F = P!=Q  (do nothing. return to_pos to from_pos)
-                            if( (y_component%2==1) == (x_component%(2*chp)>=chp) )
-                                to_pos = x_component + 4*y_component
-
+                            to_pos = coOrd_to_pos(v.x, v.y)
                             println("to_pos: ${to_pos}")
                             v.setLayoutParams(p(0))
                             v.z = 0f
-//                            do_move()
+                            do_move()
                         }
                         else -> return@OnTouchListener false
                     }
