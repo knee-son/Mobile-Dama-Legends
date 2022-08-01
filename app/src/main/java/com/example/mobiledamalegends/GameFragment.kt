@@ -32,14 +32,38 @@ class GameFragment : Fragment() {
     private val binding get() = _binding!!
 
 
+
+    companion object {
+        // piece height is 39dp
+        val dip = 39f
+        lateinit var r: Resources
+        var px by Delegates.notNull<Int>() // piece size in px
+        var brd by Delegates.notNull<Int>() // board size in px
+        var chp by Delegates.notNull<Float>() // chop (1/8th) off the board
+        var ofs by Delegates.notNull<Float>() // piece from chop offset
+
+        //for moving pieces on drag:
+        var xCoOrdinate = 0f
+        var yCoOrdinate = 0f
+
+        var from_pos = 0
+        var to_pos = 0
+
+        var white_playing = true
+
+        val white_image = R.drawable.whitedamapiece
+        val black_image = R.drawable.blackdamapiece
+
+        val pop_up = 20
+        val pop_half = pop_up.toFloat()/2
+    }
+
     enum class TileState {blank, white, black, lit}
 
-    data class TileContent (val tile_state:TileState) {
+    data class TileContent (var tile_state:TileState) {
         public var tile_image : ImageView? = null
         public var clicked = false
     }
-
-    var piece_map = Array <TileContent> (32) {TileContent(TileState.blank)}
 
     //    --28--29--30--31
     //    24--25--26--27--
@@ -49,6 +73,8 @@ class GameFragment : Fragment() {
     //    08--09--10--11--
     //    --04--05--06--07
     //    00--01--02--03--
+
+    var piece_map = Array <TileContent> (32) {TileContent(TileState.blank)}
 
     val piece_path = arrayListOf <IntArray> (
         intArrayOf( 4         ),intArrayOf( 4, 5      ),intArrayOf(5, 6       ),intArrayOf( 6, 7      ),
@@ -61,38 +87,27 @@ class GameFragment : Fragment() {
         intArrayOf(24,25      ),intArrayOf(25,26      ),intArrayOf(26,27      ),intArrayOf(27         )
     )
 
-    companion object {
-        // piece height is 39
-        val dip = 39f
-        lateinit var r: Resources
-        var px by Delegates.notNull<Int>()
-        var brd by Delegates.notNull<Int>()
-        var chp by Delegates.notNull<Int>()
-        var ofs by Delegates.notNull<Int>()
-
-        var xCoOrdinate = 0f
-        var yCoOrdinate = 0f
-
-        var from_pos = 0
-        var to_pos = 0
-    }
-
     fun do_move() {
-        val lp = piece_map[from_pos].tile_image?.getLayoutParams()
-                as RelativeLayout.LayoutParams
-        println("to_pos: "+ to_pos)
         val coOrd = pos_to_coOrd(to_pos)
-        println("coOrd: "+ coOrd[0] +", "+ coOrd[1])
-        lp.setMargins(coOrd[0], 0, 0, coOrd[1])
-        piece_map[from_pos].tile_image?.setLayoutParams(lp)
+        piece_map[from_pos].tile_image?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
         Collections.swap(piece_map.toMutableList(), from_pos, to_pos)
     }
 
-//    converts board position (0-31) to coOrds on screen
-    fun pos_to_coOrd(pos: Int): IntArray {
-        println("pos_to_coOrd converted: "+ chp+ ", " + pos/4)
-        return intArrayOf (chp*((pos%4)*2+(pos/4)%2)+ofs, chp*(pos/4)+ofs)
+    fun do_eat(arr: IntArray) {
+        for (i in arr){
+            put_state(i, TileState.blank)
+            piece_map[i].tile_image?.setVisibility(View.GONE)
+        }
     }
+
+//    converts board position (0-31) to coOrds on screen
+    fun pos_to_coOrd(_pos: Int): FloatArray {
+        val pos = if(!white_playing) 31-_pos else _pos
+        return floatArrayOf (chp*((pos%4)*2+(pos/4)%2)+ofs, chp*(7-pos/4)+ofs)
+    }
+
+    val put_state = {i: Int, t: TileState -> piece_map.set(i, TileContent(t))}
+    val put_image = {i: Int, r: Int -> piece_map[i].tile_image?.setImageResource(r)}
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -105,54 +120,57 @@ class GameFragment : Fragment() {
         r = resources
         px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dip,r.displayMetrics).toInt()
         brd = binding.gameFrame.layoutParams.width
-        chp = (brd.toFloat()/8).toInt()+1
-        println("chp calculated as: "+ chp)
-        ofs = ((brd.toFloat()/8-px)/2).toInt()
+        chp = (brd.toFloat()/8)
+        ofs = ((brd.toFloat()/8-px)/2)
 
-        for(i in  0..11) {piece_map.set(i, TileContent(TileState.white))}
-        for(i in 20..31) {piece_map.set(i, TileContent(TileState.black))}
+//        val put_state = {i: Int, t: TileState -> piece_map.set(i, TileContent(t))}
+        for(i in 0..11)  put_state(i, TileState.white)
+        for(i in 20..31) put_state(i, TileState.black)
 
         for (i in 0..31) {
-            var state = piece_map.get(i).tile_state
+            var state = piece_map[i].tile_state
 
-            if (state != TileState.blank) {
-                piece_map.get(i).tile_image = ImageView(this.context)
+            if (state != TileState.blank){
+                piece_map[i].tile_image = ImageView(this.context)
                 when (state) {
-                    TileState.white ->
-                        piece_map.get(i).tile_image?.setImageResource(R.drawable.whitedamapiece)
-                    TileState.black ->
-                        piece_map.get(i).tile_image?.setImageResource(R.drawable.blackdamapiece)
+                    TileState.white -> put_image(i, white_image)
+                    TileState.black -> put_image(i, black_image)
                     else -> {}
                 }
             }
 
-            var cur_im = piece_map.get(i).tile_image
-
-            var lp = RelativeLayout.LayoutParams(px, px)
-            lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
-            lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-            val coOrd = pos_to_coOrd(i)
-            lp.setMargins(coOrd[0], 0, 0, coOrd[1])
+            var cur_im = piece_map[i].tile_image
 
             if (cur_im != null) {
-                cur_im.setLayoutParams(lp)
-                cur_im.setOnTouchListener(OnTouchListener { view, event ->
+                val p= {_i: Int -> RelativeLayout.LayoutParams(px+_i, px+_i)}
 
+                // set size, then location
+                cur_im.setLayoutParams(p(0))
+                val coOrd = pos_to_coOrd(i)
+                cur_im.animate().x(coOrd[0].toFloat()).y(coOrd[1].toFloat()).setDuration(0)
+
+                cur_im.setOnTouchListener(OnTouchListener { v, event ->
                     when (event.actionMasked) {
                         MotionEvent.ACTION_DOWN -> {
-                            xCoOrdinate = view.x - event.rawX
-                            yCoOrdinate = view.y - event.rawY
+                            println("v.parent" + v.parent)
+                            println("v.parent.class" + v.parent.javaClass)
+                            v.z = 1f
+                            v.setLayoutParams(p(pop_up))
+                            v.animate().x(v.x-pop_half).y(v.y-pop_half)
+                            xCoOrdinate = v.x - event.rawX - pop_half
+                            yCoOrdinate = v.y - event.rawY - pop_half
                         }
-                        MotionEvent.ACTION_MOVE -> view.animate().x(event.rawX + xCoOrdinate)
+                        MotionEvent.ACTION_MOVE -> v.animate().x(event.rawX + xCoOrdinate)
                             .y(event.rawY + yCoOrdinate).setDuration(0).start()
+                        MotionEvent.ACTION_UP -> {
+                            v.z = 0f
+                            v.setLayoutParams(p(0))
+                            do_move()
+                        }
                         else -> return@OnTouchListener false
                     }
                     true
                 })
-
-//                cur_im.setOnClickListener {
-//                    view.setLayoutParams(RelativeLayout.LayoutParams(px+5,px+5))
-//                }
 
                 binding.damaField.addView(cur_im)
             }
@@ -172,22 +190,7 @@ class GameFragment : Fragment() {
     }
 
     init {
-//        xCoOrdinate = 0f
-//        yCoOrdinate = 0f
 
-
-//        val handler = Handler()
-//        handler.postDelayed(Runnable {
-//            from_pos = 9
-//            to_pos = 13
-//            do_move()
-//        }, 1000)
-//
-//        handler.postDelayed(Runnable {
-//            from_pos = 13
-//            to_pos = 17
-//            do_move()
-//        }, 1000)
 
     }
 
