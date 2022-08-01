@@ -64,7 +64,6 @@ class GameFragment : Fragment() {
     enum class TileState {blank, white, black, lit}
 
     data class TileContent (var tile_state:TileState) {
-        public var clicked = false
     }
 
     //    --28--29--30--31
@@ -76,7 +75,7 @@ class GameFragment : Fragment() {
     //    --04--05--06--07
     //    00--01--02--03--
 
-    var piece_map = Array <TileContent> (32) {TileContent(TileState.blank)}
+    var piece_map = Array <TileState> (32) {TileState.blank}
 
     val piece_path = arrayListOf <IntArray> (
         intArrayOf( 4         ),intArrayOf( 4, 5      ),intArrayOf(5, 6       ),intArrayOf( 6, 7      ),
@@ -93,6 +92,20 @@ class GameFragment : Fragment() {
         val coOrd = pos_to_coOrd(to_pos)
         image_focused?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
         Collections.swap(piece_map.toMutableList(), from_pos, to_pos)
+
+        for(y in 0..7) {
+            for (x in 0..7)
+                print(
+                    if ((x%2==0) == ((7-y)%2==0))
+                        when (piece_map[(x+(7-y)*8)/2])  {
+                            TileState.white -> "WW"
+                            TileState.black -> "BB"
+                            else -> "**"
+                        }
+                    else "--"
+                )
+            println()
+        }
     }
 
     fun do_eat(arr: IntArray) {
@@ -112,17 +125,15 @@ class GameFragment : Fragment() {
         val clip = {i: Int -> if(i<0) 0 else if(i>7) 7 else i}
 
         var y_component = clip( ((brd-y)/chp-.5).toInt() )
-        println("y_component: ${y_component}")
 
         var x_component = clip( (x/chp+.5).toInt() )
-        println("x_component: ${x_component}")
 
         return if((x_component%2==0) == (y_component%2==0))
                 (x_component + y_component*8)/2
         else from_pos
     }
 
-    val put_state = {i: Int, t: TileState -> piece_map.set(i, TileContent(t))}
+    val put_state = {i: Int, t: TileState -> piece_map.set(i, t)}
     val put_image = {r: Int -> image_focused?.setImageResource(r)}
 
     @SuppressLint("ClickableViewAccessibility")
@@ -143,7 +154,7 @@ class GameFragment : Fragment() {
         for(i in 20..31) put_state(i, TileState.black)
 
         for (i in 0..31) {
-            var state = piece_map[i].tile_state
+            var state = piece_map[i]
 
             if (state != TileState.blank){
                 image_focused = ImageView(this.context)
@@ -179,11 +190,9 @@ class GameFragment : Fragment() {
                             .y(event.rawY + yCoOrdinate).setDuration(0).start()
                         MotionEvent.ACTION_UP -> {
                             to_pos = coOrd_to_pos(v.x, v.y)
-                            println("to_pos: ${to_pos}")
                             v.setLayoutParams(p(0))
                             v.z = 0f
                             do_move()
-                            println("the thing moved!")
                         }
                         else -> return@OnTouchListener false
                     }
