@@ -31,5 +31,6 @@
     <string name="playText">Play</string>
     <string name="profileText">Profile</string>
     <string name="settingsText">Settings</string>
+    <string name="backText">Back</string>
 
 </resources>
