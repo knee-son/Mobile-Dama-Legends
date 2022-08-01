@@ -16,6 +16,9 @@
         <action
         android:id="@+id/action_MenuFragment_to_LoginFragment"
         app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/action_MenuFragment_to_AboutFragment"
+            app:destination="@id/AboutFragment" />
     </fragment>
 
     <fragment
@@ -53,5 +56,10 @@
             android:id="@+id/action_LoginFragment_to_GameFragment"
             app:destination="@id/GameFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/AboutFragment"
+        android:name="com.example.mobiledamalegends.AboutFragment"
+        android:label="AboutFragment"
+        tools:layout="@layout/fragment_about" />
 
 </navigation>

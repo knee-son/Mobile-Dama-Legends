@@ -3,22 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/activity_main.xml" value="0.23731884057971014" />
-        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_about.xml" value="0.27291666666666664" />
-        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_game.xml" value="0.23731884057971014" />
-        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_lobby.xml" value="0.23731884057971014" />
-        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_login.xml" value="0.25" />
-        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_menu.xml" value="0.23731884057971014" />
-        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_profile.xml" value="0.23731884057971014" />
-        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_signup.xml" value="0.23731884057971014" />
-        <entry key="..\:/Users/Computer/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_splashscreen.xml" value="0.22" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2095" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/drawable/ic_baseline_email_24.xml" value="0.21" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.21" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/drawable/ic_baseline_security.xml" value="0.21" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2095" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/activity_main.xml" value="0.24635416666666668" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/activity_maps.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/content_main.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_about.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_first.xml" value="0.24635416666666668" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_game.xml" value="0.20208333333333334" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_game.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_lobby.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_login.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Mobile-Dama-Legends/app/src/main/res/layout/fragment_menu.xml" value="0.20208333333333334" />

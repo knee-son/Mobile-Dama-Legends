@@ -39,6 +39,10 @@ class MenuFragment : Fragment() {
         binding.buttonSignup.setOnClickListener {
             findNavController().navigate(R.id.action_MenuFragment_to_SignupFragment)
         }
+
+        binding.buttonAbout.setOnClickListener {
+            findNavController().navigate(R.id.action_MenuFragment_to_AboutFragment)
+        }
     }
 
     override fun onDestroyView() {

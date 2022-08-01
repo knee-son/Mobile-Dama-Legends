@@ -123,7 +123,6 @@ class GameFragment : Fragment() {
         chp = (brd.toFloat()/8)
         ofs = ((brd.toFloat()/8-px)/2)
 
-//        val put_state = {i: Int, t: TileState -> piece_map.set(i, TileContent(t))}
         for(i in 0..11)  put_state(i, TileState.white)
         for(i in 20..31) put_state(i, TileState.black)
 
@@ -154,6 +153,7 @@ class GameFragment : Fragment() {
                         MotionEvent.ACTION_DOWN -> {
                             println("v.parent" + v.parent)
                             println("v.parent.class" + v.parent.javaClass)
+//                            v.
                             v.z = 1f
                             v.setLayoutParams(p(pop_up))
                             v.animate().x(v.x-pop_half).y(v.y-pop_half)
