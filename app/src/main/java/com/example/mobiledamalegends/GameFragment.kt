@@ -34,6 +34,8 @@ class GameFragment : Fragment() {
 
 
 
+    var image_focused : ImageView? = null
+
     companion object {
         // piece height is 39dp
         val dip = 39f
@@ -62,7 +64,6 @@ class GameFragment : Fragment() {
     enum class TileState {blank, white, black, lit}
 
     data class TileContent (var tile_state:TileState) {
-        public var tile_image : ImageView? = null
         public var clicked = false
     }
 
@@ -90,14 +91,14 @@ class GameFragment : Fragment() {
 
     fun do_move() {
         val coOrd = pos_to_coOrd(to_pos)
-        piece_map[from_pos].tile_image?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
-//        Collections.swap(piece_map.toMutableList(), from_pos, to_pos)
+        image_focused?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
+        Collections.swap(piece_map.toMutableList(), from_pos, to_pos)
     }
 
     fun do_eat(arr: IntArray) {
         for (i in arr){
             put_state(i, TileState.blank)
-            piece_map[i].tile_image?.setVisibility(View.GONE)
+//            piece_map[i].tile_image?.setVisibility(View.GONE)
         }
     }
 
@@ -111,21 +112,18 @@ class GameFragment : Fragment() {
         val clip = {i: Int -> if(i<0) 0 else if(i>7) 7 else i}
 
         var y_component = clip( ((brd-y)/chp-.5).toInt() )
-        y_component *= 8
         println("y_component: ${y_component}")
 
         var x_component = clip( (x/chp+.5).toInt() )
         println("x_component: ${x_component}")
 
-        var pos_hilaw = x_component + y_component
-        return if(pos_hilaw%2 == 0) pos_hilaw/2
-//        return if( (y_component%2==1) == (x_component%(2*chp)>=chp) )
-//            x_component + 4*y_component
+        return if((x_component%2==0) == (y_component%2==0))
+                (x_component + y_component*8)/2
         else from_pos
     }
 
     val put_state = {i: Int, t: TileState -> piece_map.set(i, TileContent(t))}
-    val put_image = {i: Int, r: Int -> piece_map[i].tile_image?.setImageResource(r)}
+    val put_image = {r: Int -> image_focused?.setImageResource(r)}
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -148,27 +146,27 @@ class GameFragment : Fragment() {
             var state = piece_map[i].tile_state
 
             if (state != TileState.blank){
-                piece_map[i].tile_image = ImageView(this.context)
+                image_focused = ImageView(this.context)
                 when (state) {
-                    TileState.white -> put_image(i, white_image)
-                    TileState.black -> put_image(i, black_image)
+                    TileState.white -> put_image(white_image)
+                    TileState.black -> put_image(black_image)
                     else -> {}
                 }
             }
+            else image_focused = null
 
-            var cur_im = piece_map[i].tile_image
-
-            if (cur_im != null) {
+            if (image_focused != null) {
                 val p= {_i: Int -> RelativeLayout.LayoutParams(px+_i, px+_i)}
 
                 // set size, then location
-                cur_im.setLayoutParams(p(0))
+                image_focused!!.setLayoutParams(p(0))
                 val coOrd = pos_to_coOrd(i)
-                cur_im.animate().x(coOrd[0].toFloat()).y(coOrd[1].toFloat()).setDuration(0)
+                image_focused!!.animate().x(coOrd[0].toFloat()).y(coOrd[1].toFloat()).setDuration(0)
 
-                cur_im.setOnTouchListener(OnTouchListener { v, event ->
+                image_focused!!.setOnTouchListener(OnTouchListener { v, event ->
                     when (event.actionMasked) {
                         MotionEvent.ACTION_DOWN -> {
+                            image_focused = v as ImageView
                             from_pos = coOrd_to_pos(v.x, v.y)
                             println("from_pos: ${from_pos}")
                             v.z = 1f
@@ -185,27 +183,28 @@ class GameFragment : Fragment() {
                             v.setLayoutParams(p(0))
                             v.z = 0f
                             do_move()
+                            println("the thing moved!")
                         }
                         else -> return@OnTouchListener false
                     }
                     true
                 })
 
-                binding.damaField.addView(cur_im)
+                binding.damaField.addView(image_focused)
             }
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            from_pos = 8
-            to_pos = 12
-            do_move()
-        }, 1000)
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            from_pos = 9
-            to_pos = 13
-            do_move()
-        }, 2000)
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            from_pos = 8
+//            to_pos = 12
+//            do_move()
+//        }, 1000)
+//
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            from_pos = 9
+//            to_pos = 13
+//            do_move()
+//        }, 2000)
     }
 
     init {
