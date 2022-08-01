@@ -13,6 +13,7 @@ import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import androidx.core.view.ancestors
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.mobiledamalegends.databinding.FragmentGameBinding
@@ -40,7 +41,7 @@ class GameFragment : Fragment() {
         var px by Delegates.notNull<Int>() // piece size in px
         var brd by Delegates.notNull<Int>() // board size in px
         var chp by Delegates.notNull<Float>() // chop (1/8th) off the board
-        var ofs by Delegates.notNull<Float>() // piece from chop offset
+        var ofs by Delegates.notNull<Float>() // piece to chop offset
 
         //for moving pieces on drag:
         var xCoOrdinate = 0f
@@ -151,21 +152,33 @@ class GameFragment : Fragment() {
                 cur_im.setOnTouchListener(OnTouchListener { v, event ->
                     when (event.actionMasked) {
                         MotionEvent.ACTION_DOWN -> {
-                            println("v.parent" + v.parent)
-                            println("v.parent.class" + v.parent.javaClass)
-//                            v.
+                            from_pos = i
+                            println("from_pos: ${from_pos}")
                             v.z = 1f
                             v.setLayoutParams(p(pop_up))
-                            v.animate().x(v.x-pop_half).y(v.y-pop_half)
+                            v.animate().x(v.x-pop_half).y(v.y-pop_half).z(1f)
                             xCoOrdinate = v.x - event.rawX - pop_half
                             yCoOrdinate = v.y - event.rawY - pop_half
                         }
                         MotionEvent.ACTION_MOVE -> v.animate().x(event.rawX + xCoOrdinate)
                             .y(event.rawY + yCoOrdinate).setDuration(0).start()
                         MotionEvent.ACTION_UP -> {
-                            v.z = 0f
+                            println("x, y: ${v.x}, ${brd-v.y}")
+                            val y_component = ((brd-v.y)/chp).toInt()
+                            val x_component = (v.x/(chp*2)).toInt()
+
+//                            does x and y land on a dark tile?
+//                            P: y_component is odd ( y_component%2 == 1 )
+//                            Q: x_component is > 1 chop ( x_component%(2*chp) > chp )
+//                            T = P&&Q || !P!Q -> P == P (this is an xNOR)
+//                            F = P!=Q  (do nothing. return to_pos to from_pos)
+                            if( (y_component%2==1) == (x_component%(2*chp)>=chp) )
+                                to_pos = x_component + 4*y_component
+
+                            println("to_pos: ${to_pos}")
                             v.setLayoutParams(p(0))
-                            do_move()
+                            v.z = 0f
+//                            do_move()
                         }
                         else -> return@OnTouchListener false
                     }
