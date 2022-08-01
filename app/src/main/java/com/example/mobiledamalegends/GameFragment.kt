@@ -1,7 +1,10 @@
 package com.example.mobiledamalegends
 
+import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,17 +16,28 @@ import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.mobiledamalegends.databinding.FragmentGameBinding
+import java.util.*
+import kotlin.properties.Delegates
 
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
 class GameFragment : Fragment() {
-    enum class TileState {blank, white, black}
+
+    private var _binding: FragmentGameBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
+
+    enum class TileState {blank, white, black, lit}
 
     data class TileContent (val tile_state:TileState) {
         public var tile_image : ImageView? = null
-        public var clicked = false}
+        public var clicked = false
+    }
 
     var piece_map = Array <TileContent> (32) {TileContent(TileState.blank)}
 
@@ -47,61 +61,83 @@ class GameFragment : Fragment() {
         intArrayOf(24,25      ),intArrayOf(25,26      ),intArrayOf(26,27      ),intArrayOf(27         )
     )
 
-    private var _binding: FragmentGameBinding? = null
+    companion object {
+        // piece height is 39
+        val dip = 39f
+        lateinit var r: Resources
+        var px by Delegates.notNull<Int>()
+        var brd by Delegates.notNull<Int>()
+        var chp by Delegates.notNull<Int>()
+        var ofs by Delegates.notNull<Int>()
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+        var xCoOrdinate = 0f
+        var yCoOrdinate = 0f
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentGameBinding.inflate(inflater, container, false)
-        return binding.root
+        var from_pos = 0
+        var to_pos = 0
     }
 
+    fun do_move() {
+        val lp = piece_map[from_pos].tile_image?.getLayoutParams()
+                as RelativeLayout.LayoutParams
+        println("to_pos: "+ to_pos)
+        val coOrd = pos_to_coOrd(to_pos)
+        println("coOrd: "+ coOrd[0] +", "+ coOrd[1])
+        lp.setMargins(coOrd[0], 0, 0, coOrd[1])
+        piece_map[from_pos].tile_image?.setLayoutParams(lp)
+        Collections.swap(piece_map.toMutableList(), from_pos, to_pos)
+    }
+
+//    converts board position (0-31) to coOrds on screen
+    fun pos_to_coOrd(pos: Int): IntArray {
+        println("pos_to_coOrd converted: "+ chp+ ", " + pos/4)
+        return intArrayOf (chp*((pos%4)*2+(pos/4)%2)+ofs, chp*(pos/4)+ofs)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.buttonSecond.setOnClickListener {
+            findNavController().navigate(R.id.action_GameFragment_to_MenuFragment)
+        }
+
+        r = resources
+        px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dip,r.displayMetrics).toInt()
+        brd = binding.gameFrame.layoutParams.width
+        chp = (brd.toFloat()/8).toInt()+1
+        println("chp calculated as: "+ chp)
+        ofs = ((brd.toFloat()/8-px)/2).toInt()
 
         for(i in  0..11) {piece_map.set(i, TileContent(TileState.white))}
         for(i in 20..31) {piece_map.set(i, TileContent(TileState.black))}
 
-//      piece height is 36
-        val dip = 39f; val r: Resources = resources
-        val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dip,r.displayMetrics).toInt()
-
-        val brd = binding.gameFrame.layoutParams.width
-        val chp = (brd.toFloat()/8).toInt()+1
-        val ofs = ((brd.toFloat()/8-px)/2).toInt()
-
-        for (i in 0..31){
+        for (i in 0..31) {
             var state = piece_map.get(i).tile_state
 
-            if(state != TileState.blank){
+            if (state != TileState.blank) {
                 piece_map.get(i).tile_image = ImageView(this.context)
-                when(state){
+                when (state) {
                     TileState.white ->
                         piece_map.get(i).tile_image?.setImageResource(R.drawable.whitedamapiece)
                     TileState.black ->
                         piece_map.get(i).tile_image?.setImageResource(R.drawable.blackdamapiece)
-                    else -> return
+                    else -> {}
                 }
             }
 
             var cur_im = piece_map.get(i).tile_image
 
-            var lp = RelativeLayout.LayoutParams(px,px)
+            var lp = RelativeLayout.LayoutParams(px, px)
             lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
             lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-            lp.setMargins(chp*((i%4)*2 + (i/4)%2)+ofs, 0, 0, chp*(i/4)+ofs)
+            val coOrd = pos_to_coOrd(i)
+            lp.setMargins(coOrd[0], 0, 0, coOrd[1])
 
-            var xCoOrdinate = 0f
-            var yCoOrdinate = 0f
-            if(cur_im != null) {
+            if (cur_im != null) {
                 cur_im.setLayoutParams(lp)
-
                 cur_im.setOnTouchListener(OnTouchListener { view, event ->
+
                     when (event.actionMasked) {
                         MotionEvent.ACTION_DOWN -> {
                             xCoOrdinate = view.x - event.rawX
@@ -114,26 +150,58 @@ class GameFragment : Fragment() {
                     true
                 })
 
-//                cur_im?.setOnClickListener {
+//                cur_im.setOnClickListener {
 //                    view.setLayoutParams(RelativeLayout.LayoutParams(px+5,px+5))
 //                }
 
                 binding.damaField.addView(cur_im)
             }
-
-//            val myImage = ImageView(this.context)
-//            myImage.setImageResource(R.drawable.blackdamapiece)
-//            binding.gameFrame.addView(myImage)
-//            myImage.setLayoutParams(ViewGroup.LayoutParams(px,px))
         }
 
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_GameFragment_to_MenuFragment)
-        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            from_pos = 8
+            to_pos = 12
+            do_move()
+        }, 1000)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            from_pos = 9
+            to_pos = 13
+            do_move()
+        }, 2000)
+    }
+
+    init {
+//        xCoOrdinate = 0f
+//        yCoOrdinate = 0f
+
+
+//        val handler = Handler()
+//        handler.postDelayed(Runnable {
+//            from_pos = 9
+//            to_pos = 13
+//            do_move()
+//        }, 1000)
+//
+//        handler.postDelayed(Runnable {
+//            from_pos = 13
+//            to_pos = 17
+//            do_move()
+//        }, 1000)
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        _binding = FragmentGameBinding.inflate(inflater, container, false)
+        return binding.root
     }
 }
