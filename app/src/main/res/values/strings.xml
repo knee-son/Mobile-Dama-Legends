@@ -22,5 +22,11 @@
     <string name="alreadyHaveAcc">Already Have an Account?</string>
     <string name="dontHaveAcc">Do not Have an Account?</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="devoGrp">Developers</string>
+    <string name="subong">Reynaldo Subong Jr.</string>
+    <string name="duterte">Charniel Duterte</string>
+    <string name="sanchez">Rafael Sanchez</string>
+    <string name="cervantez">Joshua Cervantez</string>
+    <string name="purpose">Mobile Dama Legends is an entertainment mobile application which is developed for school purposes only.</string>
 
 </resources>

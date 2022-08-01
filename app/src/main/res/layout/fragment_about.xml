@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_soft"
+    tools:context=".fragment_about">
+
+    <TextView
+        android:id="@+id/textview_welcome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/devoGrp"
+        android:textAlignment="center"
+        android:textColor="#7DA4DF"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.11"
+        app:layout_constraintVertical_chainStyle="spread"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/textview_welcome2"
+        android:layout_width="337dp"
+        android:layout_height="116dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/purpose"
+        android:textAlignment="center"
+        android:textColor="#7DA4DF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.761"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.902"
+        app:layout_constraintVertical_chainStyle="spread"
+        tools:ignore="TextContrastCheck" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="201dp"
+        android:layout_height="62dp"
+        android:layout_marginBottom="96dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/textview_welcome2"
+        app:layout_constraintEnd_toEndOf="@+id/textview_welcome"
+        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintStart_toStartOf="@+id/textview_welcome"
+        app:layout_constraintTop_toBottomOf="@+id/textview_welcome"
+        app:layout_constraintVertical_bias="0.243">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_baseline_person_24"
+            android:drawablePadding="10dp"
+            android:textAlignment="center"
+            android:textColor="#7DA4DF"
+            app:autoSizeTextType="uniform" />
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="63dp"
+            android:text="@string/duterte"
+            android:textAlignment="center"
+            android:textColor="#7DA4DF"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="201dp"
+        android:layout_height="62dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="@+id/textview_welcome"
+        app:layout_constraintHorizontal_bias="0.853"
+        app:layout_constraintStart_toStartOf="@+id/textview_welcome"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.49">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_baseline_person_24"
+            android:drawablePadding="10dp"
+            android:textAlignment="center"
+            android:textColor="#7DA4DF"
+            app:autoSizeTextType="uniform" />
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="63dp"
+            android:text="@string/sanchez"
+            android:textAlignment="center"
+            android:textColor="#7DA4DF"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="201dp"
+        android:layout_height="62dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/textview_welcome2"
+        app:layout_constraintEnd_toEndOf="@+id/textview_welcome"
+        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintStart_toStartOf="@+id/textview_welcome"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.37">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_baseline_person_24"
+            android:drawablePadding="10dp"
+            android:textAlignment="center"
+            android:textColor="#7DA4DF"
+            app:autoSizeTextType="uniform" />
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="63dp"
+            android:text="@string/cervantez"
+            android:textAlignment="center"
+            android:textColor="#7DA4DF"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="201dp"
+        android:layout_height="62dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/textview_welcome2"
+        app:layout_constraintEnd_toEndOf="@+id/textview_welcome"
+        app:layout_constraintHorizontal_bias="0.853"
+        app:layout_constraintStart_toStartOf="@+id/textview_welcome"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="0.524">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_baseline_person_24"
+            android:drawablePadding="10dp"
+            android:textAlignment="center"
+            android:textColor="#7DA4DF"
+            app:autoSizeTextType="uniform" />
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="63dp"
+            android:text="@string/subong"
+            android:textAlignment="center"
+            android:textColor="#7DA4DF"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
