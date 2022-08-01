@@ -28,5 +28,8 @@
     <string name="sanchez">Rafael Sanchez</string>
     <string name="cervantez">Joshua Cervantez</string>
     <string name="purpose">Mobile Dama Legends is an entertainment mobile application which is developed for school purposes only.</string>
+    <string name="playText">Play</string>
+    <string name="profileText">Profile</string>
+    <string name="settingsText">Settings</string>
 
 </resources>
