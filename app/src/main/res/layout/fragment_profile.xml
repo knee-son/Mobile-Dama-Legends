@@ -238,7 +238,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/button_play"
+        android:id="@+id/button_logout"
         android:layout_width="115dp"
         android:layout_height="50dp"
         android:text="@string/backText"

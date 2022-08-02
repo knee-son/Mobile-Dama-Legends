@@ -8,7 +8,7 @@
     tools:context=".LobbyFragment">
 
     <TextView
-        android:id="@+id/textview_welcome"
+        android:id="@+id/textview_name"
         android:layout_width="127dp"
         android:layout_height="29dp"
         android:layout_marginStart="16dp"
@@ -27,7 +27,7 @@
         tools:ignore="TextContrastCheck" />
 
     <TextView
-        android:id="@+id/textview_welcome3"
+        android:id="@+id/textview_mmr"
         android:layout_width="127dp"
         android:layout_height="29dp"
         android:layout_marginStart="16dp"
