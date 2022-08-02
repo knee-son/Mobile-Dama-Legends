@@ -11,7 +11,6 @@ import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.mobiledamalegends.databinding.FragmentGameBinding
@@ -57,11 +56,14 @@ class GameFragment : Fragment() {
 
         val pop_up = 20
         val pop_half = pop_up.toFloat()/2
+
+        enum class dir {sw, se, nw, ne} // direction
     }
 
     enum class TileState {blank, white, black, lit}
 
     data class TileContent(var tile_state: TileState) {
+        var dama = false
         public var clicked = false
         var image_index = 0
     }
@@ -78,23 +80,25 @@ class GameFragment : Fragment() {
     var piece_map = Array <TileContent> (32) {TileContent(TileState.blank)}.toMutableList()
 
 
-    val piece_path = arrayListOf <IntArray> (
-        intArrayOf( 4         ),intArrayOf( 4, 5      ),intArrayOf(5, 6       ),intArrayOf( 6, 7      ),
-        intArrayOf( 0, 1, 8, 9),intArrayOf( 1, 2, 9,10),intArrayOf( 2, 3,10,11),intArrayOf( 3,11      ),
-        intArrayOf( 4,12      ),intArrayOf( 4, 5,12,13),intArrayOf( 5, 6,13,14),intArrayOf( 6, 7,14,15),
-        intArrayOf( 8, 9,16,17),intArrayOf( 9,10,17,18),intArrayOf(10,11,18,19),intArrayOf(11,19      ),
-        intArrayOf(12,20      ),intArrayOf(12,13,20,21),intArrayOf(13,14,21,22),intArrayOf(14,15,22,23),
-        intArrayOf(16,17,24,25),intArrayOf(17,18,25,26),intArrayOf(18,19,26,27),intArrayOf(19,27      ),
-        intArrayOf(20,28      ),intArrayOf(20,21,28,29),intArrayOf(21,22,29,30),intArrayOf(22,23,30,31),
-        intArrayOf(24,25      ),intArrayOf(25,26      ),intArrayOf(26,27      ),intArrayOf(27         )
+    val move_path = arrayListOf <IntArray> (
+        intArrayOf(-1,-1,-1, 4),intArrayOf(-1,-1, 4, 5),intArrayOf(-1,-1, 5, 6),intArrayOf(-1,-1, 6, 7),
+        intArrayOf( 0, 1, 8, 9),intArrayOf( 1, 2, 9,10),intArrayOf( 2, 3,10,11),intArrayOf( 3,-1,11,-1),
+        intArrayOf( 4,-1,12,-1),intArrayOf( 4, 5,12,13),intArrayOf( 5, 6,13,14),intArrayOf( 6, 7,14,15),
+        intArrayOf( 8, 9,16,17),intArrayOf( 9,10,17,18),intArrayOf(10,11,18,19),intArrayOf(11,-1,19,-1),
+        intArrayOf(12,-1,20,-1),intArrayOf(12,13,20,21),intArrayOf(13,14,21,22),intArrayOf(14,15,22,23),
+        intArrayOf(16,17,24,25),intArrayOf(17,18,25,26),intArrayOf(18,19,26,27),intArrayOf(19,-1,27,-1),
+        intArrayOf(20,-1,28,-1),intArrayOf(20,21,28,29),intArrayOf(21,22,29,30),intArrayOf(22,23,30,31),
+        intArrayOf(24,25,-1,-1),intArrayOf(25,26,-1,-1),intArrayOf(26,27,-1,-1),intArrayOf(27,-1,-1,-1)
     )
 
     fun do_move() {
         val invalid = { to_pos = from_pos }
 
         if (piece_map[to_pos].tile_state != piece_map[from_pos].tile_state &&
-            piece_path[from_pos].contains(to_pos))
+            move_path[from_pos].contains(to_pos))
         else invalid()
+
+//        println(piece_map[dir.ne])
 
         val coOrd = pos_to_coOrd(to_pos)
         image_focused?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
