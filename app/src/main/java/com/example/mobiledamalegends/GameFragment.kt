@@ -95,7 +95,6 @@ class GameFragment : Fragment() {
 
     // TODO: 1. backwards capture 2. prevent player on opponent turn
 
-
     fun do_move() {
         var ate = false
         val ts = {i: Int -> piece_map[i].tile_state}
@@ -119,6 +118,7 @@ class GameFragment : Fragment() {
                             if (pos2!=-1 && ts(pos2)==TileState.blank)
                                 if (to == pos2) {
                                     ate = true
+                                    do_eat(intArrayOf(pos1))
                                     valid()
                                 }
                         } else if (ts(pos1) == TileState.blank)
@@ -131,6 +131,22 @@ class GameFragment : Fragment() {
         val coOrd = pos_to_coOrd(to_pos)
         image_focused?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
         Collections.swap(piece_map, from_pos, to_pos)
+
+        for(y in 0..7) {
+            for (x in 0..7)
+                print(
+                    if ((x%2==0) == ((7-y)%2==0))
+                        if(piece_map[(x+(7-y)*8)/2].tile_state!=TileState.blank)
+                            "%02d".format(piece_map[(x+(7-y)*8)/2].image_index) else "**"
+//                        when (piece_map[(x+(7-y)*8)/2].tile_state)  {
+//                            TileState.white -> "WW"
+//                            TileState.black -> "BB"
+//                            else -> "**"
+//                        }
+                    else "--"
+                )
+            println()
+        }
     }
 
     fun do_eat(arr: IntArray) {

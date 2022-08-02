@@ -43,21 +43,35 @@ class LobbyFragment : Fragment() {
             findNavController().navigate(R.id.action_lobbyFragment_to_settingsFragment)
         }
 
-//        val rootSet = AnimationSet(true)
-//        rootSet.interpolator = CycleInterpolator(7f)
-//        val trans2 =
-//            TranslateAnimation(
-//            0, 0, 0,
-//            100
-//        )
-//        trans2.duration = 800
-//        rootSet.addAnimation(trans2)
-//
-//        rootSet.setRepeatCount(Animation.INFINITE)
-
         binding.eyeCatcher.animate().scaleX(1.05f).scaleY(1.05f).setDuration(5000).setInterpolator(
             CycleInterpolator (-1f)
         )
+
+        val trans = TranslateAnimation(800f, 0f, 0f,0f)
+        trans.duration = 700
+        trans.setInterpolator(AccelerateDecelerateInterpolator())
+
+        binding.buttonPlay.setAnimation(trans)
+        binding.buttonProfile.setAnimation(trans)
+        binding.buttonSettings.setAnimation(trans)
+
+        val set = AnimationSet(true)
+
+        val rot = RotateAnimation(0f, 360f,
+            Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f)
+        rot.duration = 1200
+        rot.startOffset = 3000
+        rot.setInterpolator(DecelerateInterpolator (2.5f))
+        rot.setRepeatCount(Animation.INFINITE)
+
+        val scale = ScaleAnimation (0f, 50f,
+            0f, 50f)
+//        set.addAnimation(scale)
+        set.addAnimation(rot)
+
+        binding.fidgetSpinner.setAnimation(set)
+
     }
 
     override fun onDestroyView() {
