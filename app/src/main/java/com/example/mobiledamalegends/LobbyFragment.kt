@@ -55,7 +55,7 @@ class LobbyFragment : Fragment() {
 //
 //        rootSet.setRepeatCount(Animation.INFINITE)
 
-        binding.eyeCatcher.animate().scaleX(1.1f).scaleY(1.1f).setDuration(5000).setInterpolator(
+        binding.eyeCatcher.animate().scaleX(1.05f).scaleY(1.05f).setDuration(5000).setInterpolator(
             CycleInterpolator (-1f)
         )
     }

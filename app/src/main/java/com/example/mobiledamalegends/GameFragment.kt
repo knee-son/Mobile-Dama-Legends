@@ -106,6 +106,8 @@ class GameFragment : Fragment() {
         var _s =
             if (s == TileState.white) TileState.black
             else TileState.white
+        val valid = { to_pos=to; white_turn=!white_turn
+            println("${if(white_turn) "White" else "Black"} to move!")}
 
         if (ts(to) != s)
             if (!piece_map[fr].is_dama){ // execute simple movement
@@ -117,11 +119,11 @@ class GameFragment : Fragment() {
                             if (pos2!=-1 && ts(pos2)==TileState.blank)
                                 if (to == pos2) {
                                     ate = true
-                                    to_pos = to
+                                    valid()
                                 }
                         } else if (ts(pos1) == TileState.blank)
                             if (to == pos1)
-                                to_pos = to
+                                valid()
                     }
                 }
             }
@@ -129,8 +131,6 @@ class GameFragment : Fragment() {
         val coOrd = pos_to_coOrd(to_pos)
         image_focused?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
         Collections.swap(piece_map, from_pos, to_pos)
-
-        white_turn =! white_turn
     }
 
     fun do_eat(arr: IntArray) {
@@ -203,6 +203,11 @@ class GameFragment : Fragment() {
                 image_focused!!.animate().x(coOrd[0].toFloat()).y(coOrd[1].toFloat()).setDuration(0)
 
                 image_focused!!.setOnTouchListener(OnTouchListener { v, event ->
+                    val is_white =
+                        if(piece_map[i].tile_state==TileState.white) true else false
+                    println("Touched! state = ${piece_map[i].tile_state}")
+                    if (!(is_white == white_turn)) return@OnTouchListener false
+
                     when (event.actionMasked) {
                         MotionEvent.ACTION_DOWN -> {
                             image_focused = v as ImageView
