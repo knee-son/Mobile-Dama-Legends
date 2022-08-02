@@ -33,7 +33,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.btnLogin.setOnClickListener {
-            findNavController().navigate(R.id.action_LoginFragment_to_GameFragment)
+            findNavController().navigate(R.id.action_LoginFragment_to_lobbyFragment)
         }
     }
 

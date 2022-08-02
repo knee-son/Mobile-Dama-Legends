@@ -61,7 +61,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/button_play"
         android:layout_width="115dp"
         android:layout_height="50dp"
         android:text="@string/playText"
@@ -127,7 +127,7 @@
         tools:ignore="TextContrastCheck" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/eyeCatcher"
         android:layout_width="346dp"
         android:layout_height="316dp"
         android:src="@drawable/ic_baseline_blur_on_24"

@@ -9,19 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
-import com.example.mobiledamalegends.ProfileFragment.Companion.newInstance
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.example.mobiledamalegends.databinding.FragmentSignupBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SignupFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SignupFragment : Fragment() {
+
     private var _binding: FragmentSignupBinding? = null
 
     // This property is only valid between onCreateView and
@@ -46,7 +41,7 @@ class SignupFragment : Fragment() {
         }
 
         binding.btnSignup.setOnClickListener {
-            findNavController().navigate(R.id.action_SignupFragment_to_GameFragment)
+            findNavController().navigate(R.id.action_SignupFragment_to_lobbyFragment)
         }
 
         binding.btnSignup.setOnClickListener {

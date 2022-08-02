@@ -27,8 +27,8 @@
         android:label="GameFragment"
         tools:layout="@layout/fragment_game">
         <action
-            android:id="@+id/action_GameFragment_to_MenuFragment"
-            app:destination="@id/MenuFragment" />
+            android:id="@+id/action_GameFragment_to_lobbyFragment"
+            app:destination="@id/lobbyFragment" />
     </fragment>
 
     <fragment
@@ -40,8 +40,8 @@
             android:id="@+id/action_SignupFragment_to_LoginFragment"
             app:destination="@id/LoginFragment" />
         <action
-            android:id="@+id/action_SignupFragment_to_GameFragment"
-            app:destination="@id/GameFragment" />
+            android:id="@+id/action_SignupFragment_to_lobbyFragment"
+            app:destination="@id/lobbyFragment" />
     </fragment>
 
     <fragment
@@ -53,13 +53,49 @@
             android:id="@+id/action_LoginFragment_to_SignupFragment"
             app:destination="@id/SignupFragment" />
         <action
-            android:id="@+id/action_LoginFragment_to_GameFragment"
-            app:destination="@id/GameFragment" />
+            android:id="@+id/action_LoginFragment_to_lobbyFragment"
+            app:destination="@id/lobbyFragment" />
     </fragment>
     <fragment
         android:id="@+id/AboutFragment"
         android:name="com.example.mobiledamalegends.AboutFragment"
         android:label="AboutFragment"
         tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/lobbyFragment"
+        android:name="com.example.mobiledamalegends.LobbyFragment"
+        android:label="fragment_lobby"
+        tools:layout="@layout/fragment_lobby" >
+        <action
+            android:id="@+id/action_lobbyFragment_to_GameFragment"
+            app:destination="@id/GameFragment" />
+        <action
+            android:id="@+id/action_lobbyFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_lobbyFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.mobiledamalegends.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_lobbyFragment"
+            app:destination="@id/lobbyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.mobiledamalegends.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_MenuFragment"
+            app:destination="@id/MenuFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_lobbyFragment"
+            app:destination="@id/lobbyFragment" />
+    </fragment>
 
 </navigation>

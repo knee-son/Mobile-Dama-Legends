@@ -57,13 +57,13 @@ class GameFragment : Fragment() {
         val pop_up = 20
         val pop_half = pop_up.toFloat()/2
 
-        enum class dir {sw, se, nw, ne} // direction
+        var white_turn = true
     }
 
     enum class TileState {blank, white, black, lit}
 
     data class TileContent(var tile_state: TileState) {
-        var dama = false
+        var is_dama = false
         public var clicked = false
         var image_index = 0
     }
@@ -79,6 +79,8 @@ class GameFragment : Fragment() {
 
     var piece_map = Array <TileContent> (32) {TileContent(TileState.blank)}.toMutableList()
 
+//        index:     0   1   2   3
+//        direction: se  sw  ne  nw
 
     val move_path = arrayListOf <IntArray> (
         intArrayOf(-1,-1,-1, 4),intArrayOf(-1,-1, 4, 5),intArrayOf(-1,-1, 5, 6),intArrayOf(-1,-1, 6, 7),
@@ -91,18 +93,44 @@ class GameFragment : Fragment() {
         intArrayOf(24,25,-1,-1),intArrayOf(25,26,-1,-1),intArrayOf(26,27,-1,-1),intArrayOf(27,-1,-1,-1)
     )
 
+    // TODO: 1. backwards capture 2. prevent player on opponent turn
+
+
     fun do_move() {
-        val invalid = { to_pos = from_pos }
+        var ate = false
+        val ts = {i: Int -> piece_map[i].tile_state}
+        val to = to_pos
+        val fr = from_pos
+        to_pos = from_pos
+        var s = ts(fr)
+        var _s =
+            if (s == TileState.white) TileState.black
+            else TileState.white
 
-        if (piece_map[to_pos].tile_state != piece_map[from_pos].tile_state &&
-            move_path[from_pos].contains(to_pos))
-        else invalid()
-
-//        println(piece_map[dir.ne])
+        if (ts(to) != s)
+            if (!piece_map[fr].is_dama){ // execute simple movement
+                for (i in if(white_turn) 2..3 else 0..1) {
+                    var pos1 = move_path[fr][i]
+                    if(pos1 != -1){
+                        if (ts(pos1) == _s) {
+                            var pos2 = move_path[pos1][i]
+                            if (pos2!=-1 && ts(pos2)==TileState.blank)
+                                if (to == pos2) {
+                                    ate = true
+                                    to_pos = to
+                                }
+                        } else if (ts(pos1) == TileState.blank)
+                            if (to == pos1)
+                                to_pos = to
+                    }
+                }
+            }
 
         val coOrd = pos_to_coOrd(to_pos)
         image_focused?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
         Collections.swap(piece_map, from_pos, to_pos)
+
+        white_turn =! white_turn
     }
 
     fun do_eat(arr: IntArray) {
@@ -141,7 +169,7 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_GameFragment_to_MenuFragment)
+            findNavController().navigate(R.id.action_GameFragment_to_lobbyFragment)
         }
 
         r = resources
