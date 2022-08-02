@@ -33,5 +33,10 @@
     <string name="settingsText">Settings</string>
     <string name="backText">Back</string>
     <string name="logoutText">Logout</string>
+    <string name="DrawText">Draw</string>
+    <string name="namePlayer1">Player 1</string>
+    <string name="namePlayer2">Player 2</string>
+    <string name="namePlayer1mmr">3421</string>
+    <string name="namePlayer2mmr">2353</string>
 
 </resources>
