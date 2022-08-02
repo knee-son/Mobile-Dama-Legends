@@ -3,8 +3,6 @@ package com.example.mobiledamalegends
 import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,7 +11,7 @@ import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import androidx.core.view.ancestors
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.mobiledamalegends.databinding.FragmentGameBinding
@@ -63,8 +61,9 @@ class GameFragment : Fragment() {
 
     enum class TileState {blank, white, black, lit}
 
-    data class TileContent (var tile_state:TileState) {
+    data class TileContent(var tile_state: TileState) {
         public var clicked = false
+        var image_index = 0
     }
 
     //    --28--29--30--31
@@ -78,6 +77,7 @@ class GameFragment : Fragment() {
 
     var piece_map = Array <TileContent> (32) {TileContent(TileState.blank)}.toMutableList()
 
+
     val piece_path = arrayListOf <IntArray> (
         intArrayOf( 4         ),intArrayOf( 4, 5      ),intArrayOf(5, 6       ),intArrayOf( 6, 7      ),
         intArrayOf( 0, 1, 8, 9),intArrayOf( 1, 2, 9,10),intArrayOf( 2, 3,10,11),intArrayOf( 3,11      ),
@@ -90,28 +90,25 @@ class GameFragment : Fragment() {
     )
 
     fun do_move() {
+        val invalid = { to_pos = from_pos }
+
+        if (piece_map[to_pos].tile_state != piece_map[from_pos].tile_state &&
+            piece_path[from_pos].contains(to_pos))
+        else invalid()
+
         val coOrd = pos_to_coOrd(to_pos)
         image_focused?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
         Collections.swap(piece_map, from_pos, to_pos)
-        for(y in 0..7) {
-            for (x in 0..7)
-                print(
-                    if ((x%2==0) == ((7-y)%2==0))
-                        when (piece_map[(x+(7-y)*8)/2].tile_state)  {
-                            TileState.white -> "WW"
-                            TileState.black -> "BB"
-                            else -> "**"
-                        }
-                    else "--"
-                )
-            println()
-        }
     }
 
     fun do_eat(arr: IntArray) {
+        var index: Int
         for (i in arr){
-            put_state(i, TileState.blank)
-//            piece_map[i].tile_image?.setVisibility(View.GONE)
+            piece_map[i].tile_state = TileState.blank
+            index = piece_map.get(i).image_index
+            var im = binding.damaField.getChildAt(index)
+
+            if(im != null) im.setVisibility(View.GONE)
         }
     }
 
@@ -125,10 +122,7 @@ class GameFragment : Fragment() {
         val clip = {i: Int -> if(i<0) 0 else if(i>7) 7 else i}
 
         var y_component = clip( ((brd-y)/chp-.5).toInt() )
-        println("y_component: ${y_component}")
-
         var x_component = clip( (x/chp+.5).toInt() )
-        println("x_component: ${x_component}")
 
         return if((x_component%2==0) == (y_component%2==0))
                 (x_component + y_component*8)/2
@@ -181,7 +175,6 @@ class GameFragment : Fragment() {
                         MotionEvent.ACTION_DOWN -> {
                             image_focused = v as ImageView
                             from_pos = coOrd_to_pos(v.x, v.y)
-                            println("from_pos: ${from_pos}")
                             v.z = 1f
                             v.setLayoutParams(p(pop_up))
                             v.animate().x(v.x-pop_half).y(v.y-pop_half).z(1f)
@@ -192,11 +185,9 @@ class GameFragment : Fragment() {
                             .y(event.rawY + yCoOrdinate).setDuration(0).start()
                         MotionEvent.ACTION_UP -> {
                             to_pos = coOrd_to_pos(v.x, v.y)
-                            println("to_pos: ${to_pos}")
                             v.setLayoutParams(p(0))
                             v.z = 0f
                             do_move()
-                            println("the thing moved!")
                         }
                         else -> return@OnTouchListener false
                     }
@@ -204,25 +195,10 @@ class GameFragment : Fragment() {
                 })
 
                 binding.damaField.addView(image_focused)
+                piece_map[i].image_index = binding.damaField.indexOfChild(image_focused)
+
             }
         }
-
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            from_pos = 8
-//            to_pos = 12
-//            do_move()
-//        }, 1000)
-//
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            from_pos = 9
-//            to_pos = 13
-//            do_move()
-//        }, 2000)
-    }
-
-    init {
-
-
     }
 
     override fun onDestroyView() {
