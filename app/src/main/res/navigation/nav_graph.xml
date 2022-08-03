@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/MenuFragment">
+    app:startDestination="@id/splashscreenFragment">
 
     <fragment
         android:id="@+id/MenuFragment"
@@ -97,5 +97,10 @@
             android:id="@+id/action_settingsFragment_to_lobbyFragment"
             app:destination="@id/lobbyFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/splashscreenFragment"
+        android:name="com.example.mobiledamalegends.SplashscreenFragment"
+        android:label="fragment_splashscreen"
+        tools:layout="@layout/fragment_splashscreen" />
 
 </navigation>

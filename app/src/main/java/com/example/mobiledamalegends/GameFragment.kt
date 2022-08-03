@@ -50,6 +50,7 @@ class GameFragment : Fragment() {
         var to_pos = 0
 
         var white_playing = true
+        var white_turn = true
 
         val white_image = R.drawable.whitedamapiece
         val black_image = R.drawable.blackdamapiece
@@ -57,7 +58,6 @@ class GameFragment : Fragment() {
         val pop_up = 20
         val pop_half = pop_up.toFloat()/2
 
-        var white_turn = true
     }
 
     enum class TileState {blank, white, black, lit}
@@ -67,6 +67,8 @@ class GameFragment : Fragment() {
         public var clicked = false
         var image_index = 0
     }
+
+    // TODO: transfer var map and paths to companion object
 
     //    --28--29--30--31
     //    24--25--26--27--
@@ -131,22 +133,6 @@ class GameFragment : Fragment() {
         val coOrd = pos_to_coOrd(to_pos)
         image_focused?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
         Collections.swap(piece_map, from_pos, to_pos)
-
-        for(y in 0..7) {
-            for (x in 0..7)
-                print(
-                    if ((x%2==0) == ((7-y)%2==0))
-                        if(piece_map[(x+(7-y)*8)/2].tile_state!=TileState.blank)
-                            "%02d".format(piece_map[(x+(7-y)*8)/2].image_index) else "**"
-//                        when (piece_map[(x+(7-y)*8)/2].tile_state)  {
-//                            TileState.white -> "WW"
-//                            TileState.black -> "BB"
-//                            else -> "**"
-//                        }
-                    else "--"
-                )
-            println()
-        }
     }
 
     fun do_eat(arr: IntArray) {
@@ -163,7 +149,8 @@ class GameFragment : Fragment() {
 //    converts board position (0-31) to coOrds on screen
     fun pos_to_coOrd(_pos: Int): FloatArray {
         val pos = if(!white_playing) 31-_pos else _pos
-        return floatArrayOf (chp*((pos%4)*2+(pos/4)%2)+ofs, chp*(7-pos/4)+ofs)
+        return floatArrayOf (chp*((pos%4)*2+(pos/4)%2)+ofs,
+            chp*(7-pos/4)+ofs)
     }
 
     fun coOrd_to_pos(x: Float, y: Float): Int{
@@ -177,8 +164,42 @@ class GameFragment : Fragment() {
         else from_pos
     }
 
+    val put_image = {r: Int ->
+        println("r = ${r}")
+        if (r <0) {
+            image_focused = null
+        }
+        else {
+        println("r: ${r}")
+            image_focused?.setImageResource(r)
+        }
+    }
+
+    fun print_board(){
+        for(y in 7 downTo 0) {
+            for (x in 0..7) {
+                val pos = {(x+y*8)/2}
+                print(
+                    if ((x%2==0) == (y%2==0))
+                        if (piece_map[pos()].tile_state != TileState.blank)
+
+//                            "%02d".format(piece_map[pos()].image_index)
+
+                            when (piece_map[pos()].tile_state)  {
+                                TileState.white -> "WW"
+                                TileState.black -> "BB"
+                                else -> ""
+                            }
+
+                        else "**"
+                    else "--"
+                )
+            }
+            println()
+        }
+    }
+
     val put_state = {i: Int, t: TileState -> piece_map.set(i, TileContent(t))}
-    val put_image = {r: Int -> image_focused?.setImageResource(r)}
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -200,15 +221,12 @@ class GameFragment : Fragment() {
         for (i in 0..31) {
             var state = piece_map[i].tile_state
 
-            if (state != TileState.blank){
-                image_focused = ImageView(this.context)
-                when (state) {
-                    TileState.white -> put_image(white_image)
-                    TileState.black -> put_image(black_image)
-                    else -> {}
-                }
+            when (state) {
+                TileState.white -> put_image(white_image)
+                TileState.black -> put_image(black_image)
+                TileState.lit   -> put_image(-1)
+                TileState.blank -> put_image(-1)
             }
-            else image_focused = null
 
             if (image_focused != null) {
                 val p= {_i: Int -> RelativeLayout.LayoutParams(px+_i, px+_i)}
@@ -218,6 +236,7 @@ class GameFragment : Fragment() {
                 val coOrd = pos_to_coOrd(i)
                 image_focused!!.animate().x(coOrd[0].toFloat()).y(coOrd[1].toFloat()).setDuration(0)
 
+//                make image clickable
                 image_focused!!.setOnTouchListener(OnTouchListener { v, event ->
                     val is_white =
                         if(piece_map[i].tile_state==TileState.white) true else false
@@ -249,9 +268,10 @@ class GameFragment : Fragment() {
 
                 binding.damaField.addView(image_focused)
                 piece_map[i].image_index = binding.damaField.indexOfChild(image_focused)
-
             }
         }
+
+        print_board()
     }
 
     override fun onDestroyView() {
@@ -260,7 +280,8 @@ class GameFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
