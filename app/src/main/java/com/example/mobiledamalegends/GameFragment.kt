@@ -164,17 +164,6 @@ class GameFragment : Fragment() {
         else from_pos
     }
 
-    val put_image = {r: Int ->
-        println("r = ${r}")
-        if (r <0) {
-            image_focused = null
-        }
-        else {
-        println("r: ${r}")
-            image_focused?.setImageResource(r)
-        }
-    }
-
     fun print_board(){
         for(y in 7 downTo 0) {
             for (x in 0..7) {
@@ -199,6 +188,12 @@ class GameFragment : Fragment() {
         }
     }
 
+
+    val put_image = {r: Int ->
+    println("impregnating with resource r = ${r}")
+        image_focused?.setImageResource(r)
+    }
+
     val put_state = {i: Int, t: TileState -> piece_map.set(i, TileContent(t))}
 
     @SuppressLint("ClickableViewAccessibility")
@@ -219,46 +214,78 @@ class GameFragment : Fragment() {
         for(i in 20..31) put_state(i, TileState.black)
 
         for (i in 0..31) {
+            println("checking state at i = ${i}...")
             var state = piece_map[i].tile_state
+            println("state: ${state}")
 
-            when (state) {
-                TileState.white -> put_image(white_image)
-                TileState.black -> put_image(black_image)
-                TileState.lit   -> put_image(-1)
-                TileState.blank -> put_image(-1)
-            }
+            if(state == TileState.blank) image_focused = null
 
-            if (image_focused != null) {
-                val p= {_i: Int -> RelativeLayout.LayoutParams(px+_i, px+_i)}
+            else {
+                println("image is not null!")
+                println("making new image...")
+                image_focused = ImageView(this.context)
 
+                when (state) {
+                    TileState.white -> put_image(white_image)
+                    TileState.black -> put_image(black_image)
+                    TileState.lit   -> {}
+                    TileState.blank -> {}
+                }
+                println("image impregnated with content: ${image_focused}")
+
+                val p= {w: Int -> RelativeLayout.LayoutParams(px+w, px+w)}
                 // set size, then location
                 image_focused!!.setLayoutParams(p(0))
                 val coOrd = pos_to_coOrd(i)
-                image_focused!!.animate().x(coOrd[0].toFloat()).y(coOrd[1].toFloat()).setDuration(0)
+                image_focused!!.animate()
+                    .x(coOrd[0])
+                    .y(coOrd[1])
+                    .setDuration(0)
 
 //                make image clickable
                 image_focused!!.setOnTouchListener(OnTouchListener { v, event ->
                     val is_white =
-                        if(piece_map[i].tile_state==TileState.white) true else false
-                    println("Touched! state = ${piece_map[i].tile_state}")
+                        if(state == TileState.white)
+                            true
+                        else
+                            false
+
                     if (!(is_white == white_turn)) return@OnTouchListener false
 
                     when (event.actionMasked) {
                         MotionEvent.ACTION_DOWN -> {
+//                            println("Piece touched!")
+//                            println("tile state = ${piece_map[i].tile_state}")
+//                            println("is white? ${is_white}")
+//                            println("white to move? ${white_turn}")
+
                             image_focused = v as ImageView
                             from_pos = coOrd_to_pos(v.x, v.y)
-                            v.z = 1f
-                            v.setLayoutParams(p(pop_up))
-                            v.animate().x(v.x-pop_half).y(v.y-pop_half).z(1f)
+                            v.animate()
+                                .scaleX(1.2f)
+                                .scaleY(1.2f)
+                                .x(v.x-pop_half)
+                                .y(v.y-pop_half)
+                                .z(1f)
                             xCoOrdinate = v.x - event.rawX - pop_half
                             yCoOrdinate = v.y - event.rawY - pop_half
                         }
-                        MotionEvent.ACTION_MOVE -> v.animate().x(event.rawX + xCoOrdinate)
-                            .y(event.rawY + yCoOrdinate).setDuration(0).start()
+                        MotionEvent.ACTION_MOVE -> {
+                            v.animate()
+                                .x(event.rawX + xCoOrdinate)
+                                .y(event.rawY + yCoOrdinate)
+                                .setDuration(0)
+                                .start()
+                        }
                         MotionEvent.ACTION_UP -> {
                             to_pos = coOrd_to_pos(v.x, v.y)
-                            v.setLayoutParams(p(0))
-                            v.z = 0f
+                            v.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .z(0f)
+                                .setDuration(0)
+                                .start()
+
                             do_move()
                         }
                         else -> return@OnTouchListener false
@@ -266,6 +293,7 @@ class GameFragment : Fragment() {
                     true
                 })
 
+                println("image_focused: ${image_focused}")
                 binding.damaField.addView(image_focused)
                 piece_map[i].image_index = binding.damaField.indexOfChild(image_focused)
             }

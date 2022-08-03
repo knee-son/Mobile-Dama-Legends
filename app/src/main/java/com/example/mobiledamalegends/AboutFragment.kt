@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.mobiledamalegends.databinding.FragmentAboutBinding
-import com.example.mobiledamalegends.databinding.FragmentMenuBinding
 
 class AboutFragment : Fragment() {
     private var _binding: FragmentAboutBinding? = null
