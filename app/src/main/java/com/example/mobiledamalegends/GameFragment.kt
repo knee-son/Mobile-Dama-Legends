@@ -358,9 +358,13 @@ class GameFragment : Fragment() {
         chp = (brd.toFloat()/8)
         ofs = ((brd.toFloat()/8-px)/2)
 
-        white_image = (activity as MainActivity).piece_light_2
-        black_image = (activity as MainActivity).piece_dark_2
-        board_image = (activity as MainActivity).board2
+        val index = (activity as MainActivity).theme_index
+        val fetch = {key: String ->
+            (activity as MainActivity)
+                .theme_list[index].getValue(key) as Int}
+        white_image = fetch("white")
+        black_image = fetch("black")
+        board_image = fetch("board")
 
         binding.damaBoard.setImageResource(board_image)
 

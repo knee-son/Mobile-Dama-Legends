@@ -10,9 +10,21 @@ import android.view.MenuItem
 import com.example.mobiledamalegends.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    val board2 = R.drawable.board_2
-    val piece_light_2 = R.drawable.piece_light_2
-    val piece_dark_2 = R.drawable.piece_dark_2
+    var theme_index = 0
+    val theme_list  = mutableListOf(
+        mapOf(
+            "name"  to "Cheese Cake",
+            "board" to R.drawable.board_1,
+            "white" to R.drawable.piece_light_1,
+            "black" to R.drawable.piece_dark_1
+        ),
+        mapOf(
+            "name"  to "Blueberry",
+            "board" to R.drawable.board_2,
+            "white" to R.drawable.piece_light_2,
+            "black" to R.drawable.piece_dark_2
+        )
+    )
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding

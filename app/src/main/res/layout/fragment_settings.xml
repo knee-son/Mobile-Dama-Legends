@@ -139,7 +139,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/button_next2"
+        android:id="@+id/next_theme"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:textColor="#FFFFFF"
@@ -174,7 +174,7 @@
         tools:ignore="TextContrastCheck" />
 
     <TextView
-        android:id="@+id/textview_textPersonalize"
+        android:id="@+id/theme_name"
         android:layout_width="150dp"
         android:layout_height="25dp"
         android:layout_marginStart="16dp"

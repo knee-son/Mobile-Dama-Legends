@@ -36,6 +36,22 @@ class SettingsFragment : Fragment() {
         binding.buttonBack2.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_lobbyFragment)
         }
+
+        binding.nextTheme.setOnClickListener {
+            var index = ++(activity as MainActivity).theme_index
+            if (index == (activity as MainActivity).theme_list.size) {
+                index = 0
+                (activity as MainActivity).theme_index = 0
+            }
+
+            binding.themeName.setText(
+                (activity as MainActivity).theme_list[index]["name"] as CharSequence)
+        }
+
+        binding.themeName.setText(
+            (activity as MainActivity).theme_list
+                [(activity as MainActivity).theme_index]
+                ["name"] as CharSequence)
     }
 
     override fun onDestroyView() {
