@@ -4,11 +4,8 @@ import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.view.View.OnTouchListener
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
@@ -51,95 +48,137 @@ class GameFragment : Fragment() {
 
         var white_playing = true
         var white_turn = true
+        var game_is_new = true
 
-        val white_image = R.drawable.whitedamapiece
-        val black_image = R.drawable.blackdamapiece
+        var board_image by Delegates.notNull<Int>()
+        var white_image by Delegates.notNull<Int>()
+        var black_image by Delegates.notNull<Int>()
 
-        val pop_up = 20
-        val pop_half = pop_up.toFloat()/2
+        var pos_chain = intArrayOf()
 
-    }
+        //    --28--29--30--31
+        //    24--25--26--27--
+        //    --20--21--22--23
+        //    16--17--18--19--
+        //    --12--13--14--15
+        //    08--09--10--11--
+        //    --04--05--06--07
+        //    00--01--02--03--
 
-    enum class TileState {blank, white, black, lit}
-
-    data class TileContent(var tile_state: TileState) {
-        var is_dama = false
-        public var clicked = false
-        var image_index = 0
-    }
-
-    // TODO: transfer var map and paths to companion object
-
-    //    --28--29--30--31
-    //    24--25--26--27--
-    //    --20--21--22--23
-    //    16--17--18--19--
-    //    --12--13--14--15
-    //    08--09--10--11--
-    //    --04--05--06--07
-    //    00--01--02--03--
-
-    var piece_map = Array <TileContent> (32) {TileContent(TileState.blank)}.toMutableList()
+        var tile_map = Array <TileContent> (32) {TileContent(TileState.blank)}.toMutableList()
 
 //        index:     0   1   2   3
 //        direction: se  sw  ne  nw
 
-    val move_path = arrayListOf <IntArray> (
-        intArrayOf(-1,-1,-1, 4),intArrayOf(-1,-1, 4, 5),intArrayOf(-1,-1, 5, 6),intArrayOf(-1,-1, 6, 7),
-        intArrayOf( 0, 1, 8, 9),intArrayOf( 1, 2, 9,10),intArrayOf( 2, 3,10,11),intArrayOf( 3,-1,11,-1),
-        intArrayOf( 4,-1,12,-1),intArrayOf( 4, 5,12,13),intArrayOf( 5, 6,13,14),intArrayOf( 6, 7,14,15),
-        intArrayOf( 8, 9,16,17),intArrayOf( 9,10,17,18),intArrayOf(10,11,18,19),intArrayOf(11,-1,19,-1),
-        intArrayOf(12,-1,20,-1),intArrayOf(12,13,20,21),intArrayOf(13,14,21,22),intArrayOf(14,15,22,23),
-        intArrayOf(16,17,24,25),intArrayOf(17,18,25,26),intArrayOf(18,19,26,27),intArrayOf(19,-1,27,-1),
-        intArrayOf(20,-1,28,-1),intArrayOf(20,21,28,29),intArrayOf(21,22,29,30),intArrayOf(22,23,30,31),
-        intArrayOf(24,25,-1,-1),intArrayOf(25,26,-1,-1),intArrayOf(26,27,-1,-1),intArrayOf(27,-1,-1,-1)
-    )
+        val move_path = arrayListOf <IntArray> (
+            intArrayOf(-1,-1,-1, 4),intArrayOf(-1,-1, 4, 5),intArrayOf(-1,-1, 5, 6),intArrayOf(-1,-1, 6, 7),
+            intArrayOf( 0, 1, 8, 9),intArrayOf( 1, 2, 9,10),intArrayOf( 2, 3,10,11),intArrayOf( 3,-1,11,-1),
+            intArrayOf( 4,-1,12,-1),intArrayOf( 4, 5,12,13),intArrayOf( 5, 6,13,14),intArrayOf( 6, 7,14,15),
+            intArrayOf( 8, 9,16,17),intArrayOf( 9,10,17,18),intArrayOf(10,11,18,19),intArrayOf(11,-1,19,-1),
+            intArrayOf(12,-1,20,-1),intArrayOf(12,13,20,21),intArrayOf(13,14,21,22),intArrayOf(14,15,22,23),
+            intArrayOf(16,17,24,25),intArrayOf(17,18,25,26),intArrayOf(18,19,26,27),intArrayOf(19,-1,27,-1),
+            intArrayOf(20,-1,28,-1),intArrayOf(20,21,28,29),intArrayOf(21,22,29,30),intArrayOf(22,23,30,31),
+            intArrayOf(24,25,-1,-1),intArrayOf(25,26,-1,-1),intArrayOf(26,27,-1,-1),intArrayOf(27,-1,-1,-1)
+        )
+    }
 
-    // TODO: 1. backwards capture 2. prevent player on opponent turn
+    enum class TileState {blank, white, black, lit}
+
+    data class TileContent(var state: TileState) {
+        var is_dama = false
+        public var clicked = false
+        var id = 0
+    }
+
+    // TODO: multiple piece capture
 
     fun do_move() {
         var ate = false
-        val ts = {i: Int -> piece_map[i].tile_state}
-        val to = to_pos
-        val fr = from_pos
+        val ts = {i: Int -> tile_map[i].state}
+        val tp = to_pos
+        val fp = from_pos
         to_pos = from_pos
-        var s = ts(fr)
+        var s = ts(fp) // tile state of from position
         var _s =
             if (s == TileState.white) TileState.black
             else TileState.white
-        val valid = { to_pos=to; white_turn=!white_turn
-            println("${if(white_turn) "White" else "Black"} to move!")}
 
-        if (ts(to) != s)
-            if (!piece_map[fr].is_dama){ // execute simple movement
+//        var valid = false
+        val valid = {
+            to_pos=tp
+            if(white_turn && tp in (28..31) || !white_turn && tp in (0..3)) {
+                tile_map[fp].is_dama = true
+                println("piece# ${tile_map[fp].id} has been promoted!")
+            }
+            if(!ate) white_turn=!white_turn
+            println("${
+                if(white_turn) "White"
+                else "Black"
+            } to move!")
+        }
+
+        if (ts(tp) == TileState.blank)
+            if (!tile_map[fp].is_dama){ // not dama. execute simple movement
+
                 for (i in if(white_turn) 2..3 else 0..1) {
-                    var pos1 = move_path[fr][i]
-                    if(pos1 != -1){
-                        if (ts(pos1) == _s) {
-                            var pos2 = move_path[pos1][i]
-                            if (pos2!=-1 && ts(pos2)==TileState.blank)
-                                if (to == pos2) {
-                                    ate = true
-                                    do_eat(intArrayOf(pos1))
-                                    valid()
-                                }
-                        } else if (ts(pos1) == TileState.blank)
-                            if (to == pos1)
-                                valid()
+                    println("fp: ${fp}")
+                    println("tp: ${tp}")
+                    println("move_path[fp]: ${move_path[fp].joinToString() }")
+                    println("tile_state: ${tile_map[tp].state}")
+
+                    if (
+                        move_path[fp].indexOf(tp) == i &&
+                        tile_map[tp].state == TileState.blank
+                    ) {
+                        valid()
+                        break
                     }
                 }
+
+                for (i in move_path[fp].filterIndexed {
+                        _, to -> to!=-1 && tile_map[to].state==_s}) {
+                    val dir = move_path[fp].indexOf(i)
+                    println("piece was adjacent to opponent at direction ${i}")
+                    if(move_path[move_path[fp][dir]][dir]!=-1) {
+                        if (tp == move_path[move_path[fp][dir]][dir]) {
+//                            ate = true
+                            do_eat(intArrayOf(move_path[fp][dir]))
+                            pos_chain += to_pos
+                            valid()
+                            break
+                        }
+                    }
+                }
+
+//                for (i in if(white_turn) 2..3 else 0..1) {
+//                    var pos1 = move_path[fr][i]
+//                    if(pos1 != -1){
+//                        if (ts(pos1) == _s) {
+//                            var pos2 = move_path[pos1][i]
+//                            if (pos2!=-1 && ts(pos2)==TileState.blank)
+//                                if (to == pos2) {
+//                                    ate = true
+//                                    do_eat(intArrayOf(pos1))
+//                                    valid()
+//                                }
+//                        } else if (ts(pos1) == TileState.blank)
+//                            if (to == pos1)
+//                                valid()
+//                    }
+//                }
+//
             }
 
         val coOrd = pos_to_coOrd(to_pos)
         image_focused?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
-        Collections.swap(piece_map, from_pos, to_pos)
+        Collections.swap(tile_map, from_pos, to_pos)
     }
 
     fun do_eat(arr: IntArray) {
         var index: Int
         for (i in arr){
-            piece_map[i].tile_state = TileState.blank
-            index = piece_map.get(i).image_index
+            tile_map[i].state = TileState.blank
+            index = tile_map.get(i).id
             var im = binding.damaField.getChildAt(index)
 
             if(im != null) im.setVisibility(View.GONE)
@@ -165,16 +204,17 @@ class GameFragment : Fragment() {
     }
 
     fun print_board(){
+        println(">> print_board")
         for(y in 7 downTo 0) {
             for (x in 0..7) {
                 val pos = {(x+y*8)/2}
                 print(
                     if ((x%2==0) == (y%2==0))
-                        if (piece_map[pos()].tile_state != TileState.blank)
+                        if (tile_map[pos()].state != TileState.blank)
 
 //                            "%02d".format(piece_map[pos()].image_index)
 
-                            when (piece_map[pos()].tile_state)  {
+                            when (tile_map[pos()].state)  {
                                 TileState.white -> "WW"
                                 TileState.black -> "BB"
                                 else -> ""
@@ -188,34 +228,34 @@ class GameFragment : Fragment() {
         }
     }
 
-
     val put_image = {r: Int ->
-    println("impregnating with resource r = ${r}")
+        println(">> put_image")
+        println("impregnating with resource r = ${r}")
         image_focused?.setImageResource(r)
     }
 
-    val put_state = {i: Int, t: TileState -> piece_map.set(i, TileContent(t))}
+    val put_state = {i: Int, t: TileState -> tile_map.set(i, TileContent(t))}
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_GameFragment_to_lobbyFragment)
-        }
-
-        r = resources
-        px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dip,r.displayMetrics).toInt()
-        brd = binding.gameFrame.layoutParams.width
-        chp = (brd.toFloat()/8)
-        ofs = ((brd.toFloat()/8-px)/2)
-
+    fun new_game(){
         for(i in 0..11)  put_state(i, TileState.white)
         for(i in 20..31) put_state(i, TileState.black)
 
+        game_is_new = false
+
+        load_game()
+        print_board()
+    }
+
+    fun old_game(){
+        load_game()
+        print_board()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun load_game(){
         for (i in 0..31) {
             println("checking state at i = ${i}...")
-            var state = piece_map[i].tile_state
+            var state = tile_map[i].state
             println("state: ${state}")
 
             if(state == TileState.blank) image_focused = null
@@ -234,27 +274,32 @@ class GameFragment : Fragment() {
                 println("image impregnated with content: ${image_focused}")
 
                 val p= {w: Int -> RelativeLayout.LayoutParams(px+w, px+w)}
-                // set size, then location
+
+//                 set size, then location
                 image_focused!!.setLayoutParams(p(0))
                 val coOrd = pos_to_coOrd(i)
+//                image_focused!!.x = 4*chp-px/2
+//                image_focused!!.y = 4*chp-px/2
                 image_focused!!.animate()
                     .x(coOrd[0])
                     .y(coOrd[1])
                     .setDuration(0)
+//                    .setDuration(200)
+//                    .setStartDelay(i%12*10.toLong())
 
 //                make image clickable
                 image_focused!!.setOnTouchListener(OnTouchListener { v, event ->
+                    v.performClick()
+
                     val is_white =
-                        if(state == TileState.white)
-                            true
-                        else
-                            false
+                        if(state == TileState.white) true
+                        else false
 
                     if (!(is_white == white_turn)) return@OnTouchListener false
 
                     when (event.actionMasked) {
                         MotionEvent.ACTION_DOWN -> {
-//                            println("Piece touched!")
+//                            println(">> Piece touched!")
 //                            println("tile state = ${piece_map[i].tile_state}")
 //                            println("is white? ${is_white}")
 //                            println("white to move? ${white_turn}")
@@ -264,17 +309,17 @@ class GameFragment : Fragment() {
                             v.animate()
                                 .scaleX(1.2f)
                                 .scaleY(1.2f)
-                                .x(v.x-pop_half)
-                                .y(v.y-pop_half)
+                                .x(v.x)
+                                .y(v.y)
                                 .z(1f)
-                            xCoOrdinate = v.x - event.rawX - pop_half
-                            yCoOrdinate = v.y - event.rawY - pop_half
+                                .setDuration(0)
+                            xCoOrdinate = v.x - event.rawX
+                            yCoOrdinate = v.y - event.rawY
                         }
                         MotionEvent.ACTION_MOVE -> {
                             v.animate()
                                 .x(event.rawX + xCoOrdinate)
                                 .y(event.rawY + yCoOrdinate)
-                                .setDuration(0)
                                 .start()
                         }
                         MotionEvent.ACTION_UP -> {
@@ -293,14 +338,37 @@ class GameFragment : Fragment() {
                     true
                 })
 
-                println("image_focused: ${image_focused}")
+//                println("image_focused: ${image_focused}")
                 binding.damaField.addView(image_focused)
-                piece_map[i].image_index = binding.damaField.indexOfChild(image_focused)
+                tile_map[i].id = binding.damaField.indexOfChild(image_focused)
             }
         }
-
-        print_board()
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.buttonSecond.setOnClickListener {
+            findNavController().navigate(R.id.action_GameFragment_to_lobbyFragment)
+        }
+
+        r = resources
+        px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dip,r.displayMetrics).toInt()
+        brd = binding.gameFrame.layoutParams.width
+        chp = (brd.toFloat()/8)
+        ofs = ((brd.toFloat()/8-px)/2)
+
+        white_image = (activity as MainActivity).piece_light_2
+        black_image = (activity as MainActivity).piece_dark_2
+        board_image = (activity as MainActivity).board2
+
+        binding.damaBoard.setImageResource(board_image)
+
+        if(game_is_new) new_game()
+        else old_game()
+    }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,17 +1,18 @@
 package com.example.mobiledamalegends
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import com.example.mobiledamalegends.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    val board2 = R.drawable.board_2
+    val piece_light_2 = R.drawable.piece_light_2
+    val piece_dark_2 = R.drawable.piece_dark_2
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding

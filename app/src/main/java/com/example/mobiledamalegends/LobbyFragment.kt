@@ -1,5 +1,6 @@
 package com.example.mobiledamalegends
 
+import android.animation.AnimatorSet
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,11 +44,17 @@ class LobbyFragment : Fragment() {
             findNavController().navigate(R.id.action_lobbyFragment_to_settingsFragment)
         }
 
-        binding.eyeCatcher.animate().scaleX(1.05f).scaleY(1.05f).setDuration(5000).setInterpolator(
-            CycleInterpolator (-1f)
-        )
+        val hover = ScaleAnimation(1.05f,1.15f,1.05f,1.15f,
+            Animation.RELATIVE_TO_SELF,.5f, Animation.RELATIVE_TO_SELF,.5f)
+        hover.duration = 5000
+        hover.setInterpolator(CycleInterpolator(1f))
+        hover.setRepeatCount(Animation.INFINITE)
 
-        val trans = TranslateAnimation(800f, 0f, 0f,0f)
+        binding.eyeCatcher.setAnimation(hover)
+
+        val trans = TranslateAnimation(
+            800f, 0f,
+            0f,0f)
         trans.duration = 700
         trans.setInterpolator(AccelerateDecelerateInterpolator())
 
@@ -55,9 +62,8 @@ class LobbyFragment : Fragment() {
         binding.buttonProfile.setAnimation(trans)
         binding.buttonSettings.setAnimation(trans)
 
-        val set = AnimationSet(true)
-
-        val rot = RotateAnimation(0f, 360f,
+        val rot = RotateAnimation(
+            0f, 360f,
             Animation.RELATIVE_TO_SELF, 0.5f,
             Animation.RELATIVE_TO_SELF, 0.5f)
         rot.duration = 1200
@@ -65,13 +71,26 @@ class LobbyFragment : Fragment() {
         rot.setInterpolator(DecelerateInterpolator (2.5f))
         rot.setRepeatCount(Animation.INFINITE)
 
-        val scale = ScaleAnimation (0f, 50f,
-            0f, 50f)
-//        set.addAnimation(scale)
-        set.addAnimation(rot)
+//        val scaleUp = ScaleAnimation (
+//            1f, 1.2f,
+//            1f, 1.2f,
+//            Animation.RELATIVE_TO_SELF, 0.5f,
+//            Animation.RELATIVE_TO_SELF, 0.5f)
+//        scaleUp.duration = 600
+//        scaleUp.setFillAfter(true)
+//        scaleUp.setInterpolator(DecelerateInterpolator (2.5f))
+//        scaleUp.setRepeatCount(Animation.INFINITE)
+//
+//        val scaleDown =  ScaleAnimation (
+//            1.2f,1f,
+//            1.2f,1f,
+//            Animation.RELATIVE_TO_SELF, 0.5f,
+//            Animation.RELATIVE_TO_SELF, 0.5f)
+//        scaleUp.duration = 600
+//        scaleUp.setInterpolator(DecelerateInterpolator (2.5f))
+//        scaleUp.setRepeatCount(Animation.INFINITE)
 
-        binding.fidgetSpinner.setAnimation(set)
-
+        binding.fidgetSpinner.setAnimation(rot)
     }
 
     override fun onDestroyView() {
