@@ -14,10 +14,6 @@ import com.example.mobiledamalegends.databinding.FragmentGameBinding
 import java.util.*
 import kotlin.properties.Delegates
 
-
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
 class GameFragment : Fragment() {
 
     private var _binding: FragmentGameBinding? = null
@@ -73,11 +69,11 @@ class GameFragment : Fragment() {
         val move_path = arrayListOf <IntArray> (
             intArrayOf(-1,-1,-1, 4),intArrayOf(-1,-1, 4, 5),intArrayOf(-1,-1, 5, 6),intArrayOf(-1,-1, 6, 7),
             intArrayOf( 0, 1, 8, 9),intArrayOf( 1, 2, 9,10),intArrayOf( 2, 3,10,11),intArrayOf( 3,-1,11,-1),
-            intArrayOf( 4,-1,12,-1),intArrayOf( 4, 5,12,13),intArrayOf( 5, 6,13,14),intArrayOf( 6, 7,14,15),
+            intArrayOf(-1, 4,-1,12),intArrayOf( 4, 5,12,13),intArrayOf( 5, 6,13,14),intArrayOf( 6, 7,14,15),
             intArrayOf( 8, 9,16,17),intArrayOf( 9,10,17,18),intArrayOf(10,11,18,19),intArrayOf(11,-1,19,-1),
-            intArrayOf(12,-1,20,-1),intArrayOf(12,13,20,21),intArrayOf(13,14,21,22),intArrayOf(14,15,22,23),
+            intArrayOf(-1,12,-1,20),intArrayOf(12,13,20,21),intArrayOf(13,14,21,22),intArrayOf(14,15,22,23),
             intArrayOf(16,17,24,25),intArrayOf(17,18,25,26),intArrayOf(18,19,26,27),intArrayOf(19,-1,27,-1),
-            intArrayOf(20,-1,28,-1),intArrayOf(20,21,28,29),intArrayOf(21,22,29,30),intArrayOf(22,23,30,31),
+            intArrayOf(-1,20,-1,28),intArrayOf(20,21,28,29),intArrayOf(21,22,29,30),intArrayOf(22,23,30,31),
             intArrayOf(24,25,-1,-1),intArrayOf(25,26,-1,-1),intArrayOf(26,27,-1,-1),intArrayOf(27,-1,-1,-1)
         )
     }
@@ -138,10 +134,11 @@ class GameFragment : Fragment() {
                 for (i in move_path[fp].filterIndexed {
                         _, to -> to!=-1 && tile_map[to].state==_s}) {
                     val dir = move_path[fp].indexOf(i)
-                    println("piece was adjacent to opponent at direction ${i}")
+                    println("piece was adjacent to opponent at direction ${dir}")
                     if(move_path[move_path[fp][dir]][dir]!=-1) {
                         if (tp == move_path[move_path[fp][dir]][dir]) {
 //                            ate = true
+
                             do_eat(intArrayOf(move_path[fp][dir]))
                             pos_chain += to_pos
                             valid()
@@ -149,24 +146,6 @@ class GameFragment : Fragment() {
                         }
                     }
                 }
-
-//                for (i in if(white_turn) 2..3 else 0..1) {
-//                    var pos1 = move_path[fr][i]
-//                    if(pos1 != -1){
-//                        if (ts(pos1) == _s) {
-//                            var pos2 = move_path[pos1][i]
-//                            if (pos2!=-1 && ts(pos2)==TileState.blank)
-//                                if (to == pos2) {
-//                                    ate = true
-//                                    do_eat(intArrayOf(pos1))
-//                                    valid()
-//                                }
-//                        } else if (ts(pos1) == TileState.blank)
-//                            if (to == pos1)
-//                                valid()
-//                    }
-//                }
-//
             }
 
         val coOrd = pos_to_coOrd(to_pos)
@@ -286,11 +265,8 @@ class GameFragment : Fragment() {
                     .setDuration(0)
 //                    .setDuration(200)
 //                    .setStartDelay(i%12*10.toLong())
-
 //                make image clickable
                 image_focused!!.setOnTouchListener(OnTouchListener { v, event ->
-                    v.performClick()
-
                     val is_white =
                         if(state == TileState.white) true
                         else false

@@ -1,5 +1,6 @@
 package com.example.mobiledamalegends
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -8,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import android.view.Menu
 import android.view.MenuItem
 import com.example.mobiledamalegends.databinding.ActivityMainBinding
+import java.nio.IntBuffer
 
 class MainActivity : AppCompatActivity() {
     var theme_index = 0

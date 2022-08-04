@@ -54,6 +54,20 @@
         app:layout_constraintTop_toBottomOf="@+id/game_frame" />
 
     <Button
+        android:id="@+id/button_second2"
+        android:layout_width="115dp"
+        android:layout_height="50dp"
+        android:text="End Turn"
+        android:textColor="#EDE7F6"
+        app:backgroundTint="#9BC4FF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.881"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/game_frame"
+        app:layout_constraintVertical_bias="0.242" />
+
+    <Button
         android:id="@+id/button_draw"
         android:layout_width="115dp"
         android:layout_height="50dp"
