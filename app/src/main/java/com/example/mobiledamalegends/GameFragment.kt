@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
 import android.view.View.OnTouchListener
+import android.view.animation.Animation
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.ScaleAnimation
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
@@ -89,80 +92,95 @@ class GameFragment : Fragment() {
         var id = 0
     }
 
-    // TODO: multiple piece capture
-
     fun do_move() {
-        val ts = {i: Int -> tile_map[i].state}
+        println(">> do_move called!")
+        val ts = {i: Int -> tile_map_cpy[i].state}
         val tp = to_pos
         val fp = from_pos
         to_pos = from_pos
+
+        var valid = false
+
         var s = ts(fp) // tile state of from position
         var _s =
             if (s == TileState.white) TileState.black
             else TileState.white
-
-//        var valid = false
-        val valid = {
-            to_pos = tp
-            if(white_turn && tp in (28..31) || !white_turn && tp in (0..3)) {
-                tile_map_cpy[fp].is_dama = true
-                println("piece# ${tile_map_cpy[fp].id} has been promoted!")
-            }
-            if(!ate) submit_turn()
-            else check_again(fp, tp, _s)
-        }
 
         if (ts(tp) == TileState.blank) //  pieces only hop to spaces, not on pieces
             if (!tile_map_cpy[fp].is_dama) // piece is not dama. execute simple movement
             {
                 // check for blank tile
                 for (i in if(white_turn) 2..3 else 0..1) {
-                    println("fp: ${fp}")
-                    println("tp: ${tp}")
-                    println("move_path[fp]: ${move_path[fp].joinToString() }")
-                    println("tile_state: ${tile_map_cpy[tp].state}")
-
                     if (
                         move_path[fp].indexOf(tp) == i &&
                         tile_map_cpy[tp].state == TileState.blank &&
                         !ate
                     ) {
-                        valid()
-                        break
+                        println("valid! blank tile ahead. ate=$ate")
+                        valid = true
+                        continue
                     }
                 }
                 // check for enemy tile
                 for (i in move_path[fp].filterIndexed { // enemy tile
                         _, to -> to!=-1 && tile_map_cpy[to].state==_s}) {
                     val dir = move_path[fp].indexOf(i)
-                    println("piece was adjacent to opponent at direction ${dir}")
+                    println("do_move: enemy spotted. direction = ${dir}")
                     if(move_path[move_path[fp][dir]][dir]!=-1) {
-                        if (tp == move_path[move_path[fp][dir]][dir]) {
+                        if (tp == move_path[move_path[fp][dir]][dir]
+                            &&  tile_map_cpy[move_path[fp][dir]].state == _s
+                            && !valid) {
                             tile_map_cpy[move_path[fp][dir]].state = TileState.blank
-//                            do_eat(intArrayOf(move_path[fp][dir]))
                             binding.buttonSubmit.setEnabled(true)
                             eat_chain += move_path[fp][dir]
                             pos_chain += to_pos
                             ate = true
-                            valid()
-                            break
+                            println("valid! something is edible")
+                            valid = true
+
+                            println("just ate!")
+                            println("eat_chain = ${eat_chain.joinToString()}")
+                            println("pos_chain = ${pos_chain.joinToString()}")
+
+                            continue
                         }
                     }
                 }
             }
 
+        println("checking if valid...")
+        if(valid){
+            to_pos = tp
+//            if abot na siyas tumoy ma dama siya
+
+            if(white_turn && tp in (28..31) ||
+                !white_turn && tp in (0..3)) {
+                tile_map_cpy[fp].is_dama = true
+                println("piece# ${
+                    tile_map_cpy[fp].id} has been promoted!")
+            }
+
+//            if(!ate)
+        // check again, then finally decide if padayon pa ba ta or dili kay babe, this hurts
+//            else check_again(fp, tp, _s)
+            submit_turn()
+        }
+
         val coOrd = pos_to_coOrd(to_pos)
         image_focused?.animate()?.x(coOrd[0])?.y(coOrd[1])?.setDuration(0)
         Collections.swap(tile_map, from_pos, to_pos)
-
-        print_board()
     }
 
+    // TODO: okay ra man guro ang past-position niya
+    //  ang problema kay ang oncoming nga position
+
     fun check_again(fp: Int, tp: Int, _s: TileState) {
-        for (i in move_path[fp].filterIndexed { // enemy tile
+        println(">> check_again: checking...")
+        for (i in move_path[fp].filterIndexed {
                 _, to -> to!=-1 && tile_map_cpy[to].state==_s}) {
+            println("checking i = $i")
             val dir = move_path[fp].indexOf(i)
-            println("piece was adjacent to opponent at direction ${dir}")
+            println("check_again: piece now adjacent to opponent at direction ${dir}")
             if(move_path[move_path[fp][dir]][dir]!=-1) {
                 if (tp == move_path[move_path[fp][dir]][dir]
                     && tile_map_cpy[tp].state != TileState.blank) {
@@ -176,23 +194,28 @@ class GameFragment : Fragment() {
 
     fun submit_turn(){
         println(">> submitting turn...")
-        println("eat_chain = ${eat_chain.joinToString()}")
-        println("pos_chain = ${pos_chain.joinToString()}")
         if (ate) {
             do_eat(eat_chain)
             eat_chain = intArrayOf()
             pos_chain = intArrayOf()
             binding.buttonSubmit.setEnabled(false)
+            ate = false
         }
 
-        ate=false
-        tile_map=tile_map_cpy
+        for (i in 0..31) { tile_map[i].state = tile_map_cpy[i].state }
         white_turn=!white_turn
 
-        println("${
-            if(white_turn) "White"
-            else "Black"
-        } to move!")
+        binding.textviewTurnWho.text =
+            if(white_turn) "White Turn"
+            else "Black Turn"
+        alert_text()
+
+        println(
+            (if(white_turn) "White"
+            else "Black") + "  to move!"
+        )
+
+        print_board()
     }
 
     fun do_eat(arr: IntArray) {
@@ -203,6 +226,17 @@ class GameFragment : Fragment() {
                 .getChildAt(tile_map[i].id)
                 .setVisibility(View.GONE)
         }
+    }
+
+    val alert_text = {
+        val scaleDown =  ScaleAnimation (
+            1f,1.2f,
+            1f,1.2f,
+            Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f)
+        scaleDown.duration = 600
+        scaleDown.setInterpolator(DecelerateInterpolator (-1.1f))
+        binding.textviewTurnWho.setAnimation(scaleDown)
     }
 
 //    converts board position (0-31) to coOrds on screen
@@ -270,11 +304,7 @@ class GameFragment : Fragment() {
 //        }
     }
 
-    val put_image = {r: Int ->
-        println(">> put_image")
-        println("impregnating with resource r = ${r}")
-        image_focused?.setImageResource(r)
-    }
+    val put_image = {r: Int -> image_focused?.setImageResource(r) }
 
     val put_state = {i: Int, t: TileState -> tile_map.set(i, TileContent(t))}
 
@@ -371,6 +401,8 @@ class GameFragment : Fragment() {
                                 .start()
 
                             do_move()
+
+                            println()
                         }
                         else -> return@OnTouchListener false
                     }
