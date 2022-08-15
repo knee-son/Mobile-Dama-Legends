@@ -45,57 +45,57 @@ class SignupFragment : Fragment() {
         }
 
         binding.btnSignup.setOnClickListener {
-            when {
-                TextUtils.isEmpty(binding.inputEmail.text.toString().trim { it <= ' '}) -> {
-                    Toast.makeText(
-                        getActivity(),
-                        "Please enter email.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                TextUtils.isEmpty(binding.inputPassword.text.toString().trim { it <= ' '}) -> {
-                    Toast.makeText(
-                        getActivity(),
-                        "Please enter password.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                else -> {
-                    val email: String = binding.inputEmail.text.toString().trim { it <= ' '}
-                    val password: String = binding.inputPassword.text.toString().trim { it <= ' '}
-
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(
-                            OnCompleteListener<AuthResult> { task ->
-                                if (task.isSuccessful) {
-                                    val firebaseUser: FirebaseUser = task.result!!.user!!
-
-                                    Toast.makeText(
-                                        getActivity(),
-                                        "You have been registered successfully!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-
-                                    val intent =
-                                        Intent(getActivity(), SignupFragment::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    intent.putExtra("user_id", firebaseUser.uid)
-                                    intent.putExtra("email_id", email)
-                                    startActivity(intent)
-
-                                } else{
-                                    Toast.makeText(
-                                        getActivity(),
-                                        task.exception!!.message.toString(),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                        )
-                }
-            }
+//            when {
+//                TextUtils.isEmpty(binding.inputEmail.text.toString().trim { it <= ' '}) -> {
+//                    Toast.makeText(
+//                        getActivity(),
+//                        "Please enter email.",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//
+//                TextUtils.isEmpty(binding.inputPassword.text.toString().trim { it <= ' '}) -> {
+//                    Toast.makeText(
+//                        getActivity(),
+//                        "Please enter password.",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//
+//                else -> {
+//                    val email: String = binding.inputEmail.text.toString().trim { it <= ' '}
+//                    val password: String = binding.inputPassword.text.toString().trim { it <= ' '}
+//
+//                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+//                        .addOnCompleteListener(
+//                            OnCompleteListener<AuthResult> { task ->
+//                                if (task.isSuccessful) {
+//                                    val firebaseUser: FirebaseUser = task.result!!.user!!
+//
+//                                    Toast.makeText(
+//                                        getActivity(),
+//                                        "You have been registered successfully!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//
+//                                    val intent =
+//                                        Intent(getActivity(), SignupFragment::class.java)
+//                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                                    intent.putExtra("user_id", firebaseUser.uid)
+//                                    intent.putExtra("email_id", email)
+//                                    startActivity(intent)
+//
+//                                } else{
+//                                    Toast.makeText(
+//                                        getActivity(),
+//                                        task.exception!!.message.toString(),
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                }
+//                            }
+//                        )
+//                }
+//            }
         }
     }
 
