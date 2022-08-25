@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/MenuFragment"
-        android:name="com.example.mobiledamalegends.MenuFragment"
+        android:name="com.kneeson.mobiledamalegends.MenuFragment"
         android:label="MenuFragment"
         tools:layout="@layout/fragment_menu">
         <action
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/GameFragment"
-        android:name="com.example.mobiledamalegends.GameFragment"
+        android:name="com.kneeson.mobiledamalegends.GameFragment"
         android:label="GameFragment"
         tools:layout="@layout/fragment_game">
         <action
@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/SignupFragment"
-        android:name="com.example.mobiledamalegends.SignupFragment"
+        android:name="com.kneeson.mobiledamalegends.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
         <action
@@ -46,7 +46,7 @@
 
     <fragment
     android:id="@+id/LoginFragment"
-    android:name="com.example.mobiledamalegends.LoginFragment"
+    android:name="com.kneeson.mobiledamalegends.LoginFragment"
     android:label="fragment_signup"
     tools:layout="@layout/fragment_login" >
         <action
@@ -58,12 +58,12 @@
     </fragment>
     <fragment
         android:id="@+id/AboutFragment"
-        android:name="com.example.mobiledamalegends.AboutFragment"
+        android:name="com.kneeson.mobiledamalegends.AboutFragment"
         android:label="AboutFragment"
         tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/lobbyFragment"
-        android:name="com.example.mobiledamalegends.LobbyFragment"
+        android:name="com.kneeson.mobiledamalegends.LobbyFragment"
         android:label="fragment_lobby"
         tools:layout="@layout/fragment_lobby" >
         <action
@@ -78,7 +78,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.mobiledamalegends.ProfileFragment"
+        android:name="com.kneeson.mobiledamalegends.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -87,7 +87,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.mobiledamalegends.SettingsFragment"
+        android:name="com.kneeson.mobiledamalegends.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
@@ -99,7 +99,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashscreenFragment"
-        android:name="com.example.mobiledamalegends.SplashscreenFragment"
+        android:name="com.kneeson.mobiledamalegends.SplashscreenFragment"
         android:label="fragment_splashscreen"
         tools:layout="@layout/fragment_splashscreen" />
 
