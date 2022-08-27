@@ -52,7 +52,7 @@ class GameFragment : Fragment() {
         var board_image by Delegates.notNull<Int>()
         var white_image by Delegates.notNull<Int>()
         var black_image by Delegates.notNull<Int>()
-        var lit_image = R.drawable.highlight
+        val lit_image = R.drawable.highlight
 
         var eat_chain = intArrayOf()
         var pos_chain = intArrayOf()
@@ -93,7 +93,6 @@ class GameFragment : Fragment() {
     }
 
     fun do_move() {
-        println(">> do_move called!")
         val ts = {i: Int -> tile_map_cpy[i].state}
         val tp = to_pos
         val fp = from_pos
@@ -147,8 +146,6 @@ class GameFragment : Fragment() {
             if(white_turn && tp in (28..31) ||
                 !white_turn && tp in (0..3)) {
                 tile_map_cpy[fp].is_dama = true
-                println("piece# ${
-                    tile_map_cpy[fp].id} has been promoted!")
             }
 
             if (!ate) submit_turn()
@@ -178,7 +175,6 @@ class GameFragment : Fragment() {
     }
 
     fun submit_turn(){
-        println(">> submitting turn...")
         if (ate) {
             do_eat(eat_chain)
             eat_chain = intArrayOf()
@@ -195,8 +191,6 @@ class GameFragment : Fragment() {
             else "Black Turn"
 
         alert_text()
-
-        print_board()
     }
 
     fun do_eat(arr: IntArray) {
@@ -210,7 +204,7 @@ class GameFragment : Fragment() {
     }
 
     val alert_text = {
-        val scaleDown =  ScaleAnimation (
+        val scaleDown = ScaleAnimation (
             1f,1.2f,
             1f,1.2f,
             Animation.RELATIVE_TO_SELF, 0.5f,
@@ -239,7 +233,6 @@ class GameFragment : Fragment() {
     }
 
     fun print_board(){
-        println(">> print_board")
         for(y in 7 downTo 0) {
             for (x in 0..7) {
                 val pos = {(x+y*8)/2}
@@ -356,15 +349,12 @@ class GameFragment : Fragment() {
                                 .start()
 
                             do_move()
-
-                            println()
                         }
                         else -> return@OnTouchListener false
                     }
                     true
                 })
 
-//                println("image_focused: ${image_focused}")
                 binding.damaField.addView(image_focused)
                 tile_map[i].id = binding.damaField.indexOfChild(image_focused)
             }
@@ -372,7 +362,12 @@ class GameFragment : Fragment() {
     }
 
     private fun show_highlights() {
+        println("from_pos: $from_pos")
+        println("to_pos: $to_pos")
+        print_board()
+        return Unit
         TODO("Not yet implemented")
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
